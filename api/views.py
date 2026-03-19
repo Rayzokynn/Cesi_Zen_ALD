@@ -1,10 +1,12 @@
 from django.utils import timezone
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework import status
 from .models import Activite, ArticleInfo, Utilisateur
 from .serializer import ArticleSerializer, UtilisateurSerializer
-
+from django.contrib.auth.hashers import check_password
+from rest_framework_simplejwt.tokens import RefreshToken
 
 # Gestion utilisateurs
 
@@ -47,19 +49,31 @@ def utilisateur_details(request, pk):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def vue_securisee_test(request):
+    return Response({'message': f"felicitation {request.user.pseudo} Vous êtes authentifié et pouvez accéder à cette vue sécurisée."})
+
 @api_view(['POST'])
 def connecter_utilisateur(request):
     email = request.data.get('email')
-    mot_de_passe = request.data.get('mot_de_passe')
+    password = request.data.get('password')
 
     try:
-        user = Utilisateur.objects.get(email=email, mot_de_passe=mot_de_passe)
-        user.date_connexion = timezone.now()
-        user.save()
-        serializer = UtilisateurSerializer(user)
-        return Response(serializer.data)
+        user = Utilisateur.objects.get(email=email)
     except Utilisateur.DoesNotExist:
-        return Response({'error': 'Email ou mot de passe incorrect'}, status=status.HTTP_401_UNAUTHORIZED)
+        return Response({'error': 'Email introuvable'}, status=status.HTTP_404_NOT_FOUND)
+    if not check_password(password, user.password):
+        return Response({'error': 'Mot de passe incorrect'}, status=status.HTTP_401_UNAUTHORIZED)
+    user.date_connexion = timezone.now()
+    user.save()
+    refresh = RefreshToken.for_user(user)
+
+    return Response({
+        'refresh': str(refresh),
+        'access': str(refresh.access_token),
+        'message': f'Bienvenue {user.pseudo} !'
+    }, status=status.HTTP_200_OK)
 
 @api_view(['GET'])
 def profil_utilisateur(request, pk):
@@ -71,20 +85,28 @@ def profil_utilisateur(request, pk):
         return Response(status=status.HTTP_404_NOT_FOUND)
 
 @api_view(['PUT'])
+@permission_classes([IsAuthenticated])
 def modifier_utilisateur(request, pk):
+    if request.user.id != pk:
+        return Response({'error': 'Accès refusé. Vous ne pouvez modifier que votre propre profil.'}, status=status.HTTP_403_FORBIDDEN)
+
     try:
         user = Utilisateur.objects.get(pk=pk)
     except Utilisateur.DoesNotExist:
         return Response(status=status.HTTP_404_NOT_FOUND)
 
-    serializer = UtilisateurSerializer(user, data=request.data)
+    serializer = UtilisateurSerializer(user, data=request.data, partial=True)
     if serializer.is_valid():
         serializer.save()
         return Response(serializer.data)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['DELETE'])
+@permission_classes([IsAuthenticated])
 def supprimer_utilisateur(request, pk):
+    if request.user.id != pk:
+        return Response({'error': 'Accès refusé. Vous ne pouvez supprimer que votre propre profil.'}, status=status.HTTP_403_FORBIDDEN)
+
     try:
         user = Utilisateur.objects.get(pk=pk)
         user.delete()
