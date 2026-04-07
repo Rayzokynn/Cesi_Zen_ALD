@@ -1,3 +1,5 @@
+import { addIcons } from 'ionicons';
+import { eye, eyeOff } from 'ionicons/icons';
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
@@ -29,7 +31,9 @@ export class ConnexionPage implements OnInit {
     private formBuilder: FormBuilder,
     private authService: AuthSrv,
     private router: Router
-  ) {}
+  ) {
+    addIcons({ eye, 'eye-off': eyeOff }); // Enregistre les icônes
+  }
 
   private initializeForm() {
     this.loginForm = this.formBuilder.group({
@@ -66,7 +70,7 @@ export class ConnexionPage implements OnInit {
       this.authService.login(credentials).subscribe({
         next: (res) => {
           this.isLoading = false;
-          this.router.navigate(['/home']);
+          this.router.navigate(['/tabs']);
         },
         error: (err) => {
           this.isLoading = false;

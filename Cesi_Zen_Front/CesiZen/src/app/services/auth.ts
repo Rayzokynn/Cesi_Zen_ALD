@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
+import { Router } from '@angular/router';
 import { tap } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
 
@@ -8,6 +9,7 @@ import { environment } from '../../environments/environment';
 })
 export class AuthSrv {
   private http = inject(HttpClient);
+  private router = inject(Router);
   public isAuthenticated = false;
 
   constructor() {
@@ -32,6 +34,7 @@ export class AuthSrv {
     localStorage.removeItem('access_token');
     localStorage.removeItem('refresh_token');
     this.isAuthenticated = false;
+    this.router.navigate(['/connexion']);
   }
 
   register(userData: { pseudo: string; email: string; password: string }) {

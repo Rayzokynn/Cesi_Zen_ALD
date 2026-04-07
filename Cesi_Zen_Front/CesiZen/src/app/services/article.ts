@@ -1,29 +1,18 @@
-import { Injectable } from '@angular/core';
-
-export interface Article {
-  id: number;
-  title: string;
-  imageUrl: string;
-}
+import { Injectable, inject } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ArticleService {
-
-  private articles: Article[] = [
-    { id: 1, title: 'Article 1', imageUrl: 'assets/placeholder-image.png' },
-    { id: 2, title: 'Article 2', imageUrl: 'assets/placeholder-image.png' },
-    { id: 3, title: 'Article 3', imageUrl: 'assets/placeholder-image.png' }
-  ];
-
-  constructor() { }
-
-  getArticles(): Article[] {
-    return this.articles;
+  private http = inject(HttpClient);
+  
+  getArticles() {
+    return this.http.get<any[]>(`${environment.apiUrl}/articles/`);
   }
 
-  getArticleById(id: number): Article | undefined {
-    return this.articles.find(article => article.id === id);
+  getArticleById(id: string | number) {
+    return this.http.get<any>(`${environment.apiUrl}/articles/${id}/`);
   }
 }

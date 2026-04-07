@@ -1,4 +1,6 @@
-import { Injectable, OnDestroy } from '@angular/core';
+import { inject, Injectable, OnDestroy } from '@angular/core';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { environment } from '../../environments/environment';
 
 export interface Phase {
   name: string;
@@ -23,6 +25,8 @@ export class RespirationService implements OnDestroy {
     { name: 'Équilibrant', description: '5s inspiration, 5s expiration', inspire: 5, apnee: 0, expire: 5 },
     { name: 'Apaisant', description: '4s inspiration, 6s expiration', inspire: 4, apnee: 0, expire: 6 }
   ];
+
+  private http = inject(HttpClient);
 
   activeTechnique: Technique = this.techniques[0];
   phases: Phase[] = [];
@@ -105,5 +109,45 @@ export class RespirationService implements OnDestroy {
       clearInterval(this.timer);
       this.timer = null;
     }
+  }
+
+  terminerSession() {
+    // On met l'exercice en pause avec les bonnes variables
+    this.isPlaying = false;
+    this.clearTimer();
+    
+    // On récupère le token de l'utilisateur connecté
+    const token = localStorage.getItem('access_token');
+    console.log('Mon jeton est :', token); // <-- Ajoute cette ligne
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`
+    });
+
+    // On prépare les données à envoyer
+    const data = {
+      technique_name: this.activeTechnique.name,
+      cycles_completed: this.cycleCount
+    };
+
+    // On envoie la requête POST
+    this.http.post(`${environment.apiUrl}/sessions/respiration/`, data, { headers }).subscribe({
+      next: (res) => {
+        alert(`Félicitations ! Vous avez complété ${this.cycleCount} cycles. Session enregistrée.`);
+        this.resetExercise();
+      },
+      error: (err) => {
+        console.error('Erreur lors de la sauvegarde:', err);
+        alert("Une erreur est survenue lors de l'enregistrement de la session.");
+      }
+    });
+  }
+
+  getHistorique() {
+    const token = localStorage.getItem('access_token');
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`
+    });
+    // On retourne l'Observable pour que la page puisse s'y abonner
+    return this.http.get<any[]>(`${environment.apiUrl}/sessions/respiration/historique/`, { headers });
   }
 }

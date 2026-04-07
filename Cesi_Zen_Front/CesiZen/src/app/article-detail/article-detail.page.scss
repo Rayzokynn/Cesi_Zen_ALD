@@ -1,0 +1,55 @@
+.article-full-container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding-bottom: 40px;
+
+  // Style du Titre
+  .main-title {
+    font-size: 1.8rem;
+    font-weight: 800;
+    line-height: 1.2;
+    margin-bottom: 20px;
+    color: var(--ion-text-color); // S'adapte au thème
+  }
+
+  // Style de l'Image
+  .main-image-wrapper {
+    width: 100%;
+    margin-bottom: 25px;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+
+    .responsive-img {
+      width: 100%;
+      display: block;
+      height: auto;
+      object-fit: cover;
+      max-height: 300px; // Évite que l'image ne prenne tout l'écran verticalement
+    }
+  }
+
+  // Style du Corps de texte
+  .content-body {
+    font-size: 1.1rem;
+    line-height: 1.7;
+    color: var(--ion-text-color);
+    text-align: justify;
+    opacity: 0.9;
+
+    p {
+      margin-bottom: 15px;
+    }
+  }
+
+  .footer-action {
+    margin-top: 40px;
+  }
+}
+
+// Optionnel : Un peu de style pour le mode sombre spécifiquement
+@media (prefers-color-scheme: dark) {
+  .main-image-wrapper {
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5); // Ombre plus marquée en mode sombre
+  }
+}

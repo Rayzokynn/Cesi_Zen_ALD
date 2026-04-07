@@ -7,18 +7,6 @@
 # Feel free to rename the models, but don't rename db_table values or field names.
 from django.db import models
 
-
-class Activite(models.Model):
-    titre = models.CharField(max_length=255)
-    lien_video = models.CharField(max_length=255, blank=True, null=True)
-    duree = models.IntegerField()
-    categorie = models.ForeignKey('Categorie', models.DO_NOTHING)
-
-    class Meta:
-        managed = False
-        db_table = 'activite'
-
-
 class Admin(models.Model):
     login = models.CharField(unique=True, max_length=50)
     email = models.CharField(unique=True, max_length=150)
@@ -33,11 +21,13 @@ class ArticleInfo(models.Model):
     titre = models.CharField(max_length=255)
     contenu = models.TextField()
     date_publi = models.DateTimeField(blank=True, null=True)
+    imageUrl = models.CharField(max_length=500, blank=True, null=True) 
+    
     categorie = models.ForeignKey('Categorie', models.DO_NOTHING)
     admin = models.ForeignKey(Admin, models.DO_NOTHING, blank=True, null=True)
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'article_info'
 
 
@@ -174,17 +164,6 @@ class DjangoSession(models.Model):
         db_table = 'django_session'
 
 
-class FavoriActivite(models.Model):
-    pk = models.CompositePrimaryKey('utilisateur_id', 'activite_id')
-    utilisateur = models.ForeignKey('Utilisateur', models.DO_NOTHING)
-    activite = models.ForeignKey(Activite, models.DO_NOTHING)
-    date_ajout = models.DateTimeField(blank=True, null=True)
-
-    class Meta:
-        managed = False
-        db_table = 'favori_activite'
-
-
 class JournalEmotion(models.Model):
     date_heure = models.DateTimeField(blank=True, null=True)
     emotion_niv1 = models.CharField(max_length=50)
@@ -198,12 +177,39 @@ class JournalEmotion(models.Model):
 
 
 class Utilisateur(models.Model):
+    id = models.AutoField(primary_key=True)
     pseudo = models.CharField(unique=True, max_length=50)
     email = models.CharField(unique=True, max_length=150)
     password = models.CharField(max_length=255)
     date_inscription = models.DateTimeField(blank=True, null=True)
     date_connexion = models.DateTimeField(blank=True, null=True)
 
+    @property
+    def is_authenticated(self):
+        return True
+    
     class Meta:
         managed = False
         db_table = 'utilisateur'
+
+class SessionRespiration(models.Model):
+    # Lien vers le modèle User standard de Django (utilisé par ton JWT)
+    user = models.ForeignKey('Utilisateur', models.DO_NOTHING, db_column='utilisateur_id')
+    technique_name = models.CharField(max_length=100)
+    cycles_completed = models.IntegerField()
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        managed = True  # Autorise Django à créer cette table
+        db_table = 'session_respiration'
+
+class ArticleLu(models.Model):
+    id = models.AutoField(primary_key=True) 
+    utilisateur = models.ForeignKey('Utilisateur', models.DO_NOTHING, db_column='utilisateur_id')
+    article = models.ForeignKey('ArticleInfo', models.DO_NOTHING, db_column='article_id')
+    date_lecture = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        managed = True
+        db_table = 'article_lu'
+        unique_together = (('utilisateur', 'article'),)

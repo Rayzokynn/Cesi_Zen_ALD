@@ -1,4 +1,11 @@
 {
+  "name": "CESI Zen",
+  "short_name": "CESI Zen",
+  "theme_color": "#ffffff",
+  "background_color": "#ffffff",
+  "display": "standalone",
+  "scope": "/",
+  "start_url": "/",
   "icons": [
     {
       "src": "assets/icons/icon-48.webp",

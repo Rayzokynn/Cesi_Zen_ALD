@@ -1,6 +1,5 @@
 import { Component, CUSTOM_ELEMENTS_SCHEMA, inject } from '@angular/core';
-import { IonHeader, IonToolbar, IonTitle, IonContent, IonInput, IonLabel, IonButton, IonToast, IonCard, AlertController} from '@ionic/angular/standalone';
-import { ExploreContainerComponent } from '../explore-container/explore-container.component';
+import { IonHeader, IonToolbar, IonContent, IonCard, AlertController} from '@ionic/angular/standalone';
 import { HeaderComponent } from '../components/header/header.component';
 import { FormsModule } from '@angular/forms';
 import { ApiSrv } from '../services/api-srv';
@@ -8,10 +7,11 @@ import { Preferences } from '@capacitor/preferences';
 import { Network } from '@capacitor/network';
 import { Router } from '@angular/router';
 import { ArticleService } from '../services/article';
+import { RespirationService } from '../services/respiration';
 
 interface Article {
   id: number;
-  title: string;
+  titre: string;
   imageUrl: string; 
 }
 
@@ -34,27 +34,43 @@ export class HomePage {
   user: string = 'Alexis';
   listImages: string[] = [];
   namePage: string = 'Page des chats';
+  historique: any[] = [];
+  chargement = true;
 
   tousLesArticles: Article[] = [];
   articles: Article[] = [];
 
-  constructor() {
+  constructor(private respirationService: RespirationService) {
     console.log('Constructeur  Page');
+  }
+
+  lireArticle(id: number) {
+    this.router.navigate(['/article-detail', id]);
   }
 
   async ngOnInit() {
     console.log('ngOnInit');
     const status = await Network.getStatus();
-    this.articles = this.articleService.getArticles()
     console.log('Network status:', status);
   }
 
   ionViewWillEnter() {
     console.log('IonViewWillEnter');
-    this.tousLesArticles = this.articleService.getArticles();
-    this.articles = [...this.tousLesArticles];
+    this.chargerArticles();
+    this.chargerHistorique();
   }
 
+  chargerArticles() {
+    this.articleService.getArticles().subscribe({
+      next: (data) => {
+        this.tousLesArticles = data;
+        this.articles = [...this.tousLesArticles];
+      },
+      error: (err) => {
+        console.error('Erreur lors de la récupération des articles:', err);
+      }
+    });
+  }
   ionViewDidEnter() {
     console.log('IonViewDidEnter');
     this.showWelcomePopup();
@@ -97,9 +113,24 @@ export class HomePage {
       return;
     }
     this.articles = this.tousLesArticles.filter(article => 
-      article.title.toLowerCase().includes(texteRecherche)
+      article.titre.toLowerCase().includes(texteRecherche)
     );
   }
+
+  chargerHistorique() {
+    this.chargement = true;
+    this.respirationService.getHistorique().subscribe({
+      next: (data) => {
+        this.historique = data;
+        this.chargement = false;
+      },
+      error: (err) => {
+        console.error('Erreur de récupération:', err);
+        this.chargement = false;
+      }
+    });
+  }
+}
 
   
   /*
@@ -141,4 +172,3 @@ export class HomePage {
       this.listImages = JSON.parse(data.value);
     }
   }*/
-}

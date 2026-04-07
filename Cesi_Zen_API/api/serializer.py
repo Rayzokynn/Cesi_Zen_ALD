@@ -1,6 +1,6 @@
 from django.contrib.auth.hashers import make_password
 from rest_framework import serializers
-from .models import ArticleInfo, FavoriActivite, Utilisateur
+from .models import ArticleInfo, Utilisateur, SessionRespiration
 
 class UtilisateurSerializer(serializers.ModelSerializer):
     class Meta:
@@ -21,7 +21,13 @@ class ArticleSerializer(serializers.ModelSerializer):
         model = ArticleInfo
         fields = '__all__'
 
-class FavoriActiviteSerializer(serializers.ModelSerializer):
+class SessionRespirationSerializer(serializers.ModelSerializer):
     class Meta:
-        model = FavoriActivite
-        fields = '__all__'
+        model = SessionRespiration
+        fields = ['id', 'technique_name', 'cycles_completed', 'created_at']
+
+class ArticleSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ArticleInfo
+        fields = '__all__' # Si c'est comme ça, c'est parfait !
+        # OU fields = ['id', 'titre', 'contenu', 'date_publi', 'imageUrl', ...]

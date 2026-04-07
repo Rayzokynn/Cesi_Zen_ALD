@@ -66,15 +66,15 @@
           <ion-grid class="stats-grid">
             <ion-row>
               <ion-col class="stat-item">
-                <ion-text color="primary"><div class="stat-number">12</div></ion-text>
+                <ion-text color="primary"><div class="stat-number">{{ stats.exercices }}</div></ion-text>
                 <ion-text color="medium"><div class="stat-label">Exercices</div></ion-text>
               </ion-col>
               <ion-col class="stat-item">
-                <ion-text color="primary"><div class="stat-number">28</div></ion-text>
+                <ion-text color="primary"><div class="stat-number">{{ stats.articles }}</div></ion-text>
                 <ion-text color="medium"><div class="stat-label">Articles lus</div></ion-text>
               </ion-col>
               <ion-col class="stat-item">
-                <ion-text color="primary"><div class="stat-number">156</div></ion-text>
+                <ion-text color="primary"><div class="stat-number">{{ stats.minutes }}</div></ion-text>
                 <ion-text color="medium"><div class="stat-label">Minutes relax</div></ion-text>
               </ion-col>
             </ion-row>
@@ -99,7 +99,7 @@
             Changer mot de passe
           </ion-button>
           
-          <ion-button expand="block" class="action-btn logout">
+          <ion-button color="danger" expand="block" (click)="seDeconnecter()">
             <ion-icon slot="start" [icon]="logOutOutline"></ion-icon>
             Déconnexion
           </ion-button>

@@ -7,7 +7,6 @@ class CustomJWTAuthentication(JWTAuthentication):
         try:
             user_id = validated_token.get('user_id')
             user = Utilisateur.objects.get(pk=user_id)
-            user.is_authenticated = True 
             return user
 
         except Utilisateur.DoesNotExist:

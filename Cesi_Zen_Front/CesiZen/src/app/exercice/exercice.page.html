@@ -33,6 +33,12 @@
       <button class="btn-reset" (click)="respirationService.resetExercise()">↻</button>
     </div>
 
+    <ion-button expand="block" color="success" style="margin-bottom: 2rem; width: 100%;" 
+                (click)="respirationService.terminerSession()"
+                [disabled]="respirationService.cycleCount === 0">
+      Terminer et Sauvegarder
+    </ion-button>
+
     <div class="techniques-list">
       <p class="techniques-title">Choisissez une technique</p>
       

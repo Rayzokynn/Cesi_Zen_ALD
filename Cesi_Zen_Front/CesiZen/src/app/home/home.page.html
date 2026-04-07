@@ -14,21 +14,24 @@
   <ion-list lines="none" class="articles-container">
 
     @for (article of articles; track article.id) {
-      <ion-card class="custom-article-card">
-        <div class="image-placeholder">
-          <ion-img [src]="article.imageUrl" [alt]="article.title"></ion-img>
+      <ion-card class="custom-article-card" (click)="lireArticle(article.id)" button="true">
+        <div class="image-container">
+          <img [src]="article.imageUrl" [alt]="article.titre" class="article-img">
         </div>
         
         <ion-card-header>
-          <ion-card-title class="article-title">{{ article.title }}</ion-card-title>
+          <ion-card-title class="article-title">{{ article.titre }}</ion-card-title>
         </ion-card-header>
-        
       </ion-card>
-
-    } @empty {
-      <div class="empty-state">
-        <p>Chargement des articles en cours ou aucun article disponible...</p>
-      </div>
+    } @if (chargement) {
+      @for (i of [1, 2, 3]; track i) {
+        <ion-card>
+          <ion-skeleton-text [animated]="true" style="width: 100%; height: 150px;"></ion-skeleton-text>
+          <ion-card-header>
+            <ion-skeleton-text [animated]="true" style="width: 60%; height: 20px;"></ion-skeleton-text>
+          </ion-card-header>
+        </ion-card>
+      }
     }
 
   </ion-list>

@@ -3,12 +3,13 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework import status
-from .models import Activite, ArticleInfo, Utilisateur
+from .models import ArticleInfo, ArticleLu, Utilisateur
 from .serializer import ArticleSerializer, UtilisateurSerializer
 from django.contrib.auth.hashers import check_password
 from rest_framework_simplejwt.tokens import RefreshToken
-
-# Gestion utilisateurs
+from rest_framework import generics
+from .models import SessionRespiration
+from .serializer import SessionRespirationSerializer
 
 
 @api_view(['GET'])
@@ -133,3 +134,43 @@ def get_article(request, pk):
     except ArticleInfo.DoesNotExist:
         return Response(status=status.HTTP_404_NOT_FOUND)
 
+class SaveRespirationSessionView(generics.CreateAPIView):
+    queryset = SessionRespiration.objects.all()
+    serializer_class = SessionRespirationSerializer
+    permission_classes = [IsAuthenticated]
+
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)
+
+class HistoriqueRespirationView(generics.ListAPIView):
+    serializer_class = SessionRespirationSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        return SessionRespiration.objects.filter(user=self.request.user).order_by('-created_at')
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def marquer_article_lu(request, pk):
+    try:
+        article = ArticleInfo.objects.get(pk=pk)
+        ArticleLu.objects.get_or_create(utilisateur=request.user, article=article)
+        return Response({'message': 'Lecture enregistrée'}, status=201)
+    except ArticleInfo.DoesNotExist:
+        return Response({'error': 'Article introuvable'}, status=404)
+    
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def mes_statistiques(request):
+    sessions = SessionRespiration.objects.filter(user=request.user)
+    nb_exercices = sessions.count()
+    nb_articles = ArticleLu.objects.filter(utilisateur=request.user).count()
+    
+    total_cycles = sum(session.cycles_completed for session in sessions)
+    minutes_relax = round((total_cycles * 10) / 60)
+
+    return Response({
+        'exercices': nb_exercices,
+        'minutes': minutes_relax,
+        'articles': nb_articles
+    })
