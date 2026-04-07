@@ -11,7 +11,7 @@ class UtilisateurSerializer(serializers.ModelSerializer):
         if len(value) < 8:
             raise serializers.ValidationError("Le mot de passe doit contenir au moins 8 caractères.")
         return value
-    
+
     def create(self, validated_data):
         validated_data['password'] = make_password(validated_data['password'])
         return super().create(validated_data)
