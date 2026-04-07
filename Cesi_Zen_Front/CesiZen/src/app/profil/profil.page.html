@@ -1,0 +1,112 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar>
+    <app-header></app-header>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <div class="profile-container">
+
+    <div class="profile-header">
+      <ion-text color="dark">
+        <h1>Mon Profil</h1>
+      </ion-text>
+      <ion-text color="medium">
+        <p>Consultez et gérez vos informations</p>
+      </ion-text>
+    </div>
+
+    <div class="avatar-section">
+      <ion-avatar class="avatar">
+        <div class="avatar-initials">
+          <ion-label>{{ userInitials }}</ion-label>
+        </div>
+      </ion-avatar>
+      <ion-text color="dark">
+        <h2 class="profile-name">{{ userProfil.name }}</h2>
+      </ion-text>
+      <ion-text color="medium">
+        <p class="profile-email">{{ userProfil.email }}</p>
+      </ion-text>
+    </div>
+
+    <div class="cards-section">
+      
+      <ion-card class="info-card">
+        <ion-card-header class="card-header">
+          <ion-icon [icon]="personOutline"></ion-icon>
+          <ion-card-title class="card-title">Informations Personnelles</ion-card-title>
+        </ion-card-header>
+        
+        <ion-card-content class="card-content">
+          <ion-list lines="full">
+            <ion-item class="info-row">
+              <ion-label class="info-label">Nom complet</ion-label>
+              <ion-text slot="end" class="info-value">{{ userProfil.name }}</ion-text>
+            </ion-item>
+            <ion-item class="info-row">
+              <ion-label class="info-label">Âge</ion-label>
+              <ion-text slot="end" class="info-value">{{ userProfil.age }} ans</ion-text>
+            </ion-item>
+            <ion-item class="info-row">
+              <ion-label class="info-label">Email</ion-label>
+              <ion-text slot="end" class="info-value">{{ userProfil.email }}</ion-text>
+            </ion-item>
+          </ion-list>
+        </ion-card-content>
+      </ion-card>
+
+      <ion-card class="info-card">
+        <ion-card-header class="card-header">
+          <ion-icon [icon]="statsChartOutline"></ion-icon>
+          <ion-card-title class="card-title">Activités</ion-card-title>
+        </ion-card-header>
+        
+        <ion-card-content class="card-content">
+          <ion-grid class="stats-grid">
+            <ion-row>
+              <ion-col class="stat-item">
+                <ion-text color="primary"><div class="stat-number">12</div></ion-text>
+                <ion-text color="medium"><div class="stat-label">Exercices</div></ion-text>
+              </ion-col>
+              <ion-col class="stat-item">
+                <ion-text color="primary"><div class="stat-number">28</div></ion-text>
+                <ion-text color="medium"><div class="stat-label">Articles lus</div></ion-text>
+              </ion-col>
+              <ion-col class="stat-item">
+                <ion-text color="primary"><div class="stat-number">156</div></ion-text>
+                <ion-text color="medium"><div class="stat-label">Minutes relax</div></ion-text>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+        </ion-card-content>
+      </ion-card>
+
+      <ion-card class="info-card">
+        <ion-card-header class="card-header">
+          <ion-icon [icon]="settingsOutline"></ion-icon>
+          <ion-card-title class="card-title">Paramètres</ion-card-title>
+        </ion-card-header>
+        
+        <ion-card-content class="card-content action-content">
+          <ion-button expand="block" class="action-btn edit">
+            <ion-icon slot="start" [icon]="pencilOutline"></ion-icon>
+            Modifier profil
+          </ion-button>
+          
+          <ion-button expand="block" class="action-btn secondary">
+            <ion-icon slot="start" [icon]="lockClosedOutline"></ion-icon>
+            Changer mot de passe
+          </ion-button>
+          
+          <ion-button expand="block" class="action-btn logout">
+            <ion-icon slot="start" [icon]="logOutOutline"></ion-icon>
+            Déconnexion
+          </ion-button>
+        </ion-card-content>
+      </ion-card>
+
+    </div>
+
+  </div>
+</ion-content>

@@ -1,0 +1,140 @@
+$bg-color: #f1fbf5;
+$primary-color: #00a878;
+$primary-dark: #008f66;
+$text-dark: #005c4a;
+$text-light: #5ba38e;
+$card-bg: #f5fcf8;
+$card-border: #c8ebd9;
+
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: $bg-color;
+  color: $text-dark;
+  margin: 0;
+  display: flex;
+  justify-content: center;
+}
+
+.respiration-container {
+  max-width: 400px;
+  width: 100%;
+  padding: 2rem 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 4rem;
+  
+  h1 { font-size: 1.4rem; margin: 0 0 0.5rem 0; font-weight: 600; }
+  p { font-size: 0.9rem; color: $text-light; margin: 0; }
+}
+
+.visual-area {
+  position: relative;
+  height: 250px;
+  width: 100px;
+  display: flex;
+  justify-content: center;
+  margin-bottom: 1.5rem;
+
+  .vertical-track {
+    width: 2px;
+    background-color: #a7e4c9;
+    height: 100%;
+    position: relative;
+
+    &::before, &::after {
+      content: ''; position: absolute; width: 16px; height: 2px;
+      background-color: #a7e4c9; left: -7px;
+    }
+    &::before { top: 0; }
+    &::after { bottom: 0; }
+  }
+
+  .balloon {
+    position: absolute;
+    bottom: 0%;
+    left: 50%;
+    transform: translateX(-50%);
+    transition: bottom 1s linear;
+
+    .balloon-body {
+      width: 45px; height: 55px;
+      background: radial-gradient(circle at 30% 30%, #30dfa8, $primary-color);
+      border-radius: 50% 50% 50% 50% / 45% 45% 55% 55%;
+      box-shadow: 0 10px 20px rgba($primary-color, 0.4);
+    }
+
+    .balloon-string {
+      width: 1px; height: 20px;
+      background-color: $primary-dark;
+      margin: 0 auto;
+    }
+  }
+}
+
+.timer-area {
+  text-align: center;
+  margin-bottom: 1.5rem;
+
+  .instruction { font-size: 1rem; color: $text-light; margin: 0; }
+  .countdown { font-size: 3rem; font-weight: 400; color: $primary-color; margin: 0.2rem 0; }
+  .cycle { font-size: 0.85rem; color: $text-light; margin: 0; }
+}
+
+.controls {
+  display: flex;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+
+  button {
+    width: 55px; height: 55px;
+    border-radius: 50%; border: none; cursor: pointer;
+    font-size: 1.5rem;
+    display: flex; align-items: center; justify-content: center;
+    transition: transform 0.1s;
+    &:active { transform: scale(0.95); }
+  }
+
+  .btn-play {
+    background-color: $primary-color; color: white;
+    box-shadow: 0 4px 10px rgba($primary-color, 0.3);
+  }
+
+  .btn-reset {
+    background-color: white; color: $primary-color;
+    border: 1px solid #dcf2e6;
+  }
+}
+
+.techniques-list {
+  width: 100%;
+  border-top: 1px solid #dcf2e6;
+  padding-top: 1.5rem;
+
+  .techniques-title { font-size: 0.85rem; color: $text-light; margin-bottom: 1rem; }
+
+  .technique-card {
+    background-color: $card-bg;
+    border: 1px solid $card-border;
+    border-radius: 12px;
+    padding: 1rem;
+    margin-bottom: 0.8rem;
+    cursor: pointer;
+
+    h3 { margin: 0 0 0.3rem 0; font-size: 1rem; }
+    p { margin: 0; font-size: 0.8rem; color: $text-light; }
+
+    // État actif de la carte
+    &.active {
+      background-color: $primary-color;
+      border-color: $primary-color;
+      color: white;
+      box-shadow: 0 4px 12px rgba($primary-color, 0.3);
+      p { color: #e6fcf4; }
+    }
+  }
+}

@@ -1,0 +1,48 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar>
+    <app-header></app-header>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <div class="respiration-container">
+    <ion-title class="header">
+      <h1>Exercices de Respiration</h1>
+      <p>Prenez un moment pour vous recentrer</p>
+    </ion-title>
+
+    <div class="visual-area">
+      <div class="vertical-track"></div>
+      <div class="balloon" 
+           [ngStyle]="{'bottom': respirationService.balloonBottom + '%', 'transition': respirationService.balloonTransition}">
+        <div class="balloon-body"></div>
+        <div class="balloon-string"></div>
+      </div>
+    </div>
+
+    <div class="timer-area">
+      <p class="instruction">{{ respirationService.instruction }}</p>
+      <p class="countdown">{{ respirationService.timeLeft }}</p>
+      <p class="cycle">Cycle: {{ respirationService.cycleCount }}</p>
+    </div>
+
+    <div class="controls">
+      <button class="btn-play" (click)="respirationService.togglePlay()">
+        {{ respirationService.isPlaying ? '⏸' : '▶' }}
+      </button>
+      <button class="btn-reset" (click)="respirationService.resetExercise()">↻</button>
+    </div>
+
+    <div class="techniques-list">
+      <p class="techniques-title">Choisissez une technique</p>
+      
+      <div class="technique-card" 
+           *ngFor="let tech of respirationService.techniques" 
+           [class.active]="respirationService.activeTechnique.name === tech.name"
+           (click)="respirationService.setTechnique(tech)">
+        <h3>{{ tech.name }}</h3>
+        <p>{{ tech.description }}</p>
+      </div>
+    </div>
+  </div>
+</ion-content>

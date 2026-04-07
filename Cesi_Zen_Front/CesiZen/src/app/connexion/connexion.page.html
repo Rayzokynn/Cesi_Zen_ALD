@@ -1,0 +1,102 @@
+<ion-content [fullscreen]="true" class="login-content">
+  <div class="login-container">
+    <div class="logo-section">
+      <img src="/assets/logoCesiZen-transparent.png" alt="CESI Zen Logo" class="logo" />
+      <h1 class="app-title">CESI Zen</h1>
+      <p class="app-subtitle">Bienvenue</p>
+    </div>
+
+    <ion-card class="login-card">
+      <ion-card-content class="card-content">
+        <h2 class="form-title">{{ isLoginMode ? 'Connectez-vous' : 'Créer un compte' }}</h2>
+        <p class="form-subtitle">{{ isLoginMode ? 'Accédez à votre espace personnel' : 'Rejoignez-nous pour gérer votre stress' }}</p>
+
+        <form *ngIf="isLoginMode" [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="login-form">
+          
+          <ion-item class="custom-input-item">
+            <ion-label position="floating" class="input-label">Adresse Email</ion-label>
+            <ion-input formControlName="email" type="email" placeholder="votre@email.com" class="custom-input" clearInput="true">
+              <ion-icon slot="start" [src]="mailOutline" class="input-icon"></ion-icon>
+            </ion-input>
+          </ion-item>
+          <ion-note class="error-note" *ngIf="loginForm.get('email')?.invalid && loginForm.get('email')?.touched">
+            {{ getEmailError() }}
+          </ion-note>
+
+          <ion-item class="custom-input-item">
+            <ion-label position="floating" class="input-label">Mot de passe</ion-label>
+            <ion-input formControlName="password" [type]="showPassword ? 'text' : 'password'" placeholder="••••••••" class="custom-input">
+              <ion-icon slot="start" [src]="lockClosedOutline" class="input-icon"></ion-icon>
+              <ion-button slot="end" fill="clear" size="small" (click)="togglePasswordVisibility()" class="toggle-password">
+                <ion-icon [name]="showPassword ? 'eye-off' : 'eye'" class="toggle-icon"></ion-icon>
+              </ion-button>
+            </ion-input>
+          </ion-item>
+          <ion-note class="error-note" *ngIf="loginForm.get('password')?.invalid && loginForm.get('password')?.touched">
+            {{ getPasswordError() }}
+          </ion-note>
+
+          <ion-button expand="block" type="submit" class="login-button" [disabled]="loginForm.invalid || isLoading">
+            <span *ngIf="!isLoading">Se connecter</span>
+            <ion-spinner *ngIf="isLoading" name="dots" class="spinner"></ion-spinner>
+          </ion-button>
+        </form>
+
+
+        <form *ngIf="!isLoginMode" [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="login-form">
+          
+          <ion-item class="custom-input-item">
+            <ion-label position="floating" class="input-label">Pseudo</ion-label>
+            <ion-input formControlName="pseudo" type="text" placeholder="Votre pseudo" class="custom-input" clearInput="true">
+              <ion-icon slot="start" [src]="personOutline" class="input-icon"></ion-icon>
+            </ion-input>
+          </ion-item>
+          <ion-note class="error-note" *ngIf="registerForm.get('pseudo')?.invalid && registerForm.get('pseudo')?.touched">
+            Pseudo requis (min. 3 caractères)
+          </ion-note>
+
+          <ion-item class="custom-input-item">
+            <ion-label position="floating" class="input-label">Adresse Email</ion-label>
+            <ion-input formControlName="email" type="email" placeholder="votre@email.com" class="custom-input" clearInput="true">
+              <ion-icon slot="start" [src]="mailOutline" class="input-icon"></ion-icon>
+            </ion-input>
+          </ion-item>
+          <ion-note class="error-note" *ngIf="registerForm.get('email')?.invalid && registerForm.get('email')?.touched">
+            Email invalide
+          </ion-note>
+
+          <ion-item class="custom-input-item">
+            <ion-label position="floating" class="input-label">Mot de passe</ion-label>
+            <ion-input formControlName="password" [type]="showPassword ? 'text' : 'password'" placeholder="Min. 8 caractères" class="custom-input">
+              <ion-icon slot="start" [src]="lockClosedOutline" class="input-icon"></ion-icon>
+              <ion-button slot="end" fill="clear" size="small" (click)="togglePasswordVisibility()" class="toggle-password">
+                <ion-icon [name]="showPassword ? 'eye-off' : 'eye'" class="toggle-icon"></ion-icon>
+              </ion-button>
+            </ion-input>
+          </ion-item>
+          <ion-note class="error-note" *ngIf="registerForm.get('password')?.invalid && registerForm.get('password')?.touched">
+            Le mot de passe doit faire 8 caractères minimum.
+          </ion-note>
+
+          <ion-button expand="block" type="submit" class="login-button" [disabled]="registerForm.invalid || isLoading">
+            <span *ngIf="!isLoading">S'inscrire</span>
+            <ion-spinner *ngIf="isLoading" name="dots" class="spinner"></ion-spinner>
+          </ion-button>
+        </form>
+
+        <div class="form-footer">
+          <p class="footer-text">
+            {{ isLoginMode ? 'Pas de compte ?' : 'Déjà un compte ?' }}
+            <a (click)="toggleMode()" class="link" style="cursor: pointer;">
+              {{ isLoginMode ? "S'inscrire" : 'Se connecter' }}
+            </a>
+          </p>
+          <p class="footer-text" *ngIf="isLoginMode">
+            <a href="#" class="link">Mot de passe oublié?</a>
+          </p>
+        </div>
+
+      </ion-card-content>
+    </ion-card>
+  </div>
+</ion-content>
