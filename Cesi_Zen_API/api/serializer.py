@@ -40,3 +40,18 @@ class UserSerializer(serializers.ModelSerializer):
 class ChangePasswordSerializer(serializers.Serializer):
     old_password = serializers.CharField(required=True)
     new_password = serializers.CharField(required=True)
+
+class UpdateProfileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Utilisateur
+        fields = ['pseudo', 'email']
+
+    def validate_email(self, value):
+        if Utilisateur.objects.exclude(pk=self.instance.pk).filter(email=value).exists():
+            raise serializers.ValidationError("Cet email est déjà utilisé.")
+        return value
+
+    def validate_pseudo(self, value):
+        if Utilisateur.objects.exclude(pk=self.instance.pk).filter(pseudo=value).exists():
+            raise serializers.ValidationError("Ce pseudo est déjà utilisé.")
+        return value
