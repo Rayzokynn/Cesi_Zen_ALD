@@ -22,7 +22,6 @@ export class ConnexionPage implements OnInit {
   showPassword = false;
   isLoginMode = true;
 
-  // Icons
   lockClosedOutline = lockClosedOutline;
   mailOutline = mailOutline;
   personOutline = personOutline;
@@ -32,13 +31,12 @@ export class ConnexionPage implements OnInit {
     private authService: AuthSrv,
     private router: Router
   ) {
-    addIcons({ eye, 'eye-off': eyeOff }); // Enregistre les icônes
+    addIcons({ eye, 'eye-off': eyeOff });
   }
 
   private initializeForm() {
     this.loginForm = this.formBuilder.group({
       email: ['', [Validators.required, Validators.email]],
-      // On passe de 6 à 8 caractères pour correspondre à ton backend Django !
       password: ['', [Validators.required, Validators.minLength(8)]], 
     });
     this.registerForm = this.formBuilder.group({
@@ -57,7 +55,7 @@ export class ConnexionPage implements OnInit {
   }
 
   toggleMode() {
-    this.isLoginMode = !this.isLoginMode; // Bascule le mode
+    this.isLoginMode = !this.isLoginMode;
     this.loginForm.reset();
     this.registerForm.reset();
   }

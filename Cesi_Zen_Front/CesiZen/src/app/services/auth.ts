@@ -19,7 +19,6 @@ export class AuthSrv {
     };
   }
 
-  // --- AUTHENTIFICATION ---
   login(credentials: { email: string; password: string }) {
     return this.http.post<any>(`${environment.apiUrl}/login/`, credentials).pipe(
       tap(response => {
@@ -43,7 +42,6 @@ export class AuthSrv {
     this.router.navigate(['/connexion']);
   }
 
-  // --- PROFIL ---
   getProfile(): Observable<any> {
     return this.http.get(`${environment.apiUrl}/profile/`, this.getHeaders());
   }
@@ -53,6 +51,6 @@ export class AuthSrv {
   }
 
   changePassword(data: any): Observable<any> {
-    return this.http.post(`${environment.apiUrl}/change-password/`, data, this.getHeaders());
+    return this.http.put(`${environment.apiUrl}/change-password/`, data, this.getHeaders());
   }
 }

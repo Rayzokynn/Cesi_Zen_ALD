@@ -104,7 +104,9 @@ class Categorie(models.Model):
     nom = models.CharField(max_length=100)
 
     class Meta:
-        managed = False
+
+        managed = True
+
         db_table = 'categorie'
 
 
@@ -115,7 +117,7 @@ class ConfigRespi(models.Model):
     duree_expi = models.IntegerField()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'config_respi'
 
 
@@ -172,7 +174,7 @@ class JournalEmotion(models.Model):
     utilisateur = models.ForeignKey('Utilisateur', models.DO_NOTHING)
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'journal_emotion'
 
 
@@ -189,7 +191,7 @@ class Utilisateur(models.Model):
         return True
     
     class Meta:
-        managed = False
+        managed = True
         db_table = 'utilisateur'
 
 class SessionRespiration(models.Model):
@@ -200,7 +202,7 @@ class SessionRespiration(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        managed = True  # Autorise Django à créer cette table
+        managed = True
         db_table = 'session_respiration'
 
 class ArticleLu(models.Model):

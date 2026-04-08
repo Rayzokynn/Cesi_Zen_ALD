@@ -142,7 +142,8 @@ STATIC_URL = 'static/'
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
-        'api.authentication.CustomJWTAuthentication', # On pointe bien vers authentication.py
+        'api.authentication.CustomJWTAuthentication',
+
     )
 }
 CORS_ALLOW_ALL_ORIGINS = True

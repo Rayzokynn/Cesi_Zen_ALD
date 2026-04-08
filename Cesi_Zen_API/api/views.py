@@ -4,8 +4,8 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework import status
 from .models import ArticleInfo, ArticleLu, Utilisateur
-from .serializer import ArticleSerializer, ChangePasswordSerializer, UserSerializer, UtilisateurSerializer
-from django.contrib.auth.hashers import check_password
+from .serializer import ArticleSerializer, ChangePasswordSerializer, UpdateProfileSerializer, UserSerializer, UtilisateurSerializer
+from django.contrib.auth.hashers import check_password, make_password
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework import generics
 from .models import SessionRespiration
@@ -116,9 +116,6 @@ def supprimer_utilisateur(request, pk):
         return Response(status=status.HTTP_404_NOT_FOUND)
 
 
-# Gestion articles 
-
-
 @api_view(['GET'])
 def get_articles(request):
     articles = ArticleInfo.objects.all()
@@ -182,7 +179,6 @@ class UserProfileView(generics.RetrieveUpdateAPIView):
     def get_object(self):
         return self.request.user
 
-# Changer le mot de passe
 class ChangePasswordView(generics.UpdateAPIView):
     serializer_class = ChangePasswordSerializer
     permission_classes = [IsAuthenticated]
@@ -192,19 +188,29 @@ class ChangePasswordView(generics.UpdateAPIView):
         serializer.is_valid(raise_exception=True)
         user = request.user
         
-        if not user.check_password(serializer.data.get("old_password")):
+        old_password = serializer.validated_data.get("old_password")
+        if not check_password(old_password, user.password):
             return Response({"old_password": ["Ancien mot de passe incorrect."]}, status=status.HTTP_400_BAD_REQUEST)
 
-        user.set_password(serializer.data.get("new_password"))
+        new_password = serializer.validated_data.get("new_password")
+        user.password = make_password(new_password)
         user.save()
+        
         return Response({"message": "Mot de passe mis à jour !"}, status=status.HTTP_200_OK)
     
 
-# Dans views.py
+class UpdateProfileView(generics.UpdateAPIView):
+    queryset = Utilisateur.objects.all()
+    serializer_class = UpdateProfileSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_object(self):
+        return self.request.user
+    
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def get_profile(request):
     return Response({
-        'username': request.user.username, # Doit correspondre au HTML
+        'username': request.user.username,
         'email': request.user.email
     })

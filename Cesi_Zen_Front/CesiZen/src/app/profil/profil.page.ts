@@ -21,7 +21,7 @@ export class ProfilPage implements OnInit {
   private alertCtrl = inject(AlertController);
   
   user: any = { username: '', email: '' };
-  userBackup: any = {}; // Pour annuler les modifs
+  userBackup: any = {};
   isEditing: boolean = false;
   userInitials: string = 'U';
   stats = { exercices: 0, articles: 0, minutes: 0 };
@@ -45,8 +45,8 @@ export class ProfilPage implements OnInit {
     this.authService.getProfile().subscribe({
       next: (res: any) => {
         this.user = res;
-        this.userBackup = { ...res }; // On garde une copie
-        this.userInitials = this.getInitials(res.username);
+        this.userBackup = { ...res };
+        this.userInitials = this.getInitials(res.pseudo);
       },
       error: (err: any) => console.error('Erreur profil:', err)
     });
@@ -58,14 +58,14 @@ export class ProfilPage implements OnInit {
 
   cancelEdit() {
     this.isEditing = false;
-    this.user = { ...this.userBackup }; // On restaure les données d'origine
+    this.user = { ...this.userBackup };
   }
 
   onUpdateProfile() {
     this.authService.updateProfile(this.user).subscribe({
       next: () => {
         this.isEditing = false;
-        this.userBackup = { ...this.user }; // On met à jour la sauvegarde
+        this.userBackup = { ...this.user };
         this.userInitials = this.getInitials(this.user.username);
         window.alert('Profil mis à jour !');
       },
@@ -74,7 +74,7 @@ export class ProfilPage implements OnInit {
   }
 
   async openChangePassword() {
-    const alertPopup = await this.alertCtrl.create({ // On utilise alertPopup
+    const alertPopup = await this.alertCtrl.create({
       header: 'Sécurité',
       subHeader: 'Changer le mot de passe',
       inputs: [
@@ -87,7 +87,7 @@ export class ProfilPage implements OnInit {
           text: 'Confirmer',
           handler: (data) => {
             this.authService.changePassword(data).subscribe({
-              next: () => window.alert('Mot de passe modifié !'), // window. obligatoire
+              next: () => window.alert('Mot de passe modifié !'),
               error: (err: any) => window.alert('Erreur: ' + (err.error?.detail || 'Échec'))
             });
           }
