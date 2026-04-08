@@ -1,6 +1,6 @@
 from django.urls import path
 from rest_framework_simplejwt.views import TokenRefreshView
-from .views import SaveRespirationSessionView, HistoriqueRespirationView, connecter_utilisateur, create_utilisateur, get_article, get_articles, get_utilisateurs, marquer_article_lu, mes_statistiques, modifier_utilisateur, profil_utilisateur, supprimer_utilisateur, utilisateur_details, vue_securisee_test
+from .views import ChangePasswordView, SaveRespirationSessionView, HistoriqueRespirationView, UserProfileView, connecter_utilisateur, create_utilisateur, get_article, get_articles, get_utilisateurs, marquer_article_lu, mes_statistiques, modifier_utilisateur, profil_utilisateur, supprimer_utilisateur, utilisateur_details, vue_securisee_test
 
 urlpatterns = [
     path('utilisateurs/', get_utilisateurs, name='get_utilisateurs'),
@@ -23,4 +23,6 @@ urlpatterns = [
     path('articles/', get_articles, name='articles_list'),
     path('articles/<int:pk>/', get_article, name='article_detail'),
     path('articles/<int:pk>/lu/', marquer_article_lu, name='article_lu'),
+    path('profile/', UserProfileView.as_view(), name='profile'),
+    path('change-password/', ChangePasswordView.as_view(), name='change-password'),
 ]

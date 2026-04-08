@@ -23,10 +23,10 @@
         </div>
       </ion-avatar>
       <ion-text color="dark">
-        <h2 class="profile-name">{{ userProfil.name }}</h2>
+        <h2 class="profile-name">{{ user.username || 'Utilisateur' }}</h2>
       </ion-text>
       <ion-text color="medium">
-        <p class="profile-email">{{ userProfil.email }}</p>
+        <p class="profile-email">{{ user.email }}</p>
       </ion-text>
     </div>
 
@@ -40,19 +40,39 @@
         
         <ion-card-content class="card-content">
           <ion-list lines="full">
+            
             <ion-item class="info-row">
-              <ion-label class="info-label">Nom complet</ion-label>
-              <ion-text slot="end" class="info-value">{{ userProfil.name }}</ion-text>
+              <ion-label class="info-label" [position]="isEditing ? 'stacked' : 'fixed'">Pseudo</ion-label>
+              
+              <ion-text slot="end" class="info-value" *ngIf="!isEditing">
+                {{ user.pseudo }}
+              </ion-text>
+              <ion-input slot="end" *ngIf="isEditing" [(ngModel)]="user.pseudo" type="text" class="info-value"></ion-input>
             </ion-item>
+
             <ion-item class="info-row">
-              <ion-label class="info-label">Âge</ion-label>
-              <ion-text slot="end" class="info-value">{{ userProfil.age }} ans</ion-text>
-            </ion-item>
-            <ion-item class="info-row">
-              <ion-label class="info-label">Email</ion-label>
-              <ion-text slot="end" class="info-value">{{ userProfil.email }}</ion-text>
+              <ion-label class="info-label" [position]="isEditing ? 'stacked' : 'fixed'">Email</ion-label>
+              
+              <ion-text slot="end" class="info-value" *ngIf="!isEditing">
+                {{ user.email }}
+              </ion-text>
+              
+              <ion-input slot="end" *ngIf="isEditing" [(ngModel)]="user.email" type="email" class="info-value"></ion-input>
             </ion-item>
           </ion-list>
+
+          <ion-row *ngIf="isEditing" class="ion-margin-top">
+            <ion-col size="6">
+              <ion-button expand="block" color="success" (click)="onUpdateProfile()">
+                Valider
+              </ion-button>
+            </ion-col>
+            <ion-col size="6">
+              <ion-button expand="block" color="medium" fill="clear" (click)="cancelEdit()">
+                Annuler
+              </ion-button>
+            </ion-col>
+          </ion-row>
         </ion-card-content>
       </ion-card>
 
@@ -71,11 +91,11 @@
               </ion-col>
               <ion-col class="stat-item">
                 <ion-text color="primary"><div class="stat-number">{{ stats.articles }}</div></ion-text>
-                <ion-text color="medium"><div class="stat-label">Articles lus</div></ion-text>
+                <ion-text color="medium"><div class="stat-label">Articles</div></ion-text>
               </ion-col>
               <ion-col class="stat-item">
                 <ion-text color="primary"><div class="stat-number">{{ stats.minutes }}</div></ion-text>
-                <ion-text color="medium"><div class="stat-label">Minutes relax</div></ion-text>
+                <ion-text color="medium"><div class="stat-label">Minutes</div></ion-text>
               </ion-col>
             </ion-row>
           </ion-grid>
@@ -89,17 +109,17 @@
         </ion-card-header>
         
         <ion-card-content class="card-content action-content">
-          <ion-button expand="block" class="action-btn edit">
+          <ion-button expand="block" class="action-btn edit" (click)="toggleEdit()" *ngIf="!isEditing">
             <ion-icon slot="start" [icon]="pencilOutline"></ion-icon>
             Modifier profil
           </ion-button>
           
-          <ion-button expand="block" class="action-btn secondary">
+          <ion-button expand="block" class="action-btn secondary" (click)="openChangePassword()">
             <ion-icon slot="start" [icon]="lockClosedOutline"></ion-icon>
             Changer mot de passe
           </ion-button>
           
-          <ion-button color="danger" expand="block" (click)="seDeconnecter()">
+          <ion-button color="danger" expand="block" (click)="seDeconnecter()" class="ion-margin-top">
             <ion-icon slot="start" [icon]="logOutOutline"></ion-icon>
             Déconnexion
           </ion-button>
@@ -107,6 +127,5 @@
       </ion-card>
 
     </div>
-
   </div>
 </ion-content>

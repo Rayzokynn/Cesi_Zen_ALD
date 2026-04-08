@@ -4,7 +4,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework import status
 from .models import ArticleInfo, ArticleLu, Utilisateur
-from .serializer import ArticleSerializer, UtilisateurSerializer
+from .serializer import ArticleSerializer, ChangePasswordSerializer, UserSerializer, UtilisateurSerializer
 from django.contrib.auth.hashers import check_password
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework import generics
@@ -173,4 +173,38 @@ def mes_statistiques(request):
         'exercices': nb_exercices,
         'minutes': minutes_relax,
         'articles': nb_articles
+    })
+
+class UserProfileView(generics.RetrieveUpdateAPIView):
+    serializer_class = UserSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_object(self):
+        return self.request.user
+
+# Changer le mot de passe
+class ChangePasswordView(generics.UpdateAPIView):
+    serializer_class = ChangePasswordSerializer
+    permission_classes = [IsAuthenticated]
+
+    def update(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        user = request.user
+        
+        if not user.check_password(serializer.data.get("old_password")):
+            return Response({"old_password": ["Ancien mot de passe incorrect."]}, status=status.HTTP_400_BAD_REQUEST)
+
+        user.set_password(serializer.data.get("new_password"))
+        user.save()
+        return Response({"message": "Mot de passe mis à jour !"}, status=status.HTTP_200_OK)
+    
+
+# Dans views.py
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def get_profile(request):
+    return Response({
+        'username': request.user.username, # Doit correspondre au HTML
+        'email': request.user.email
     })

@@ -1,42 +1,31 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from '../../environments/environment';
-import { IonHeader, IonToolbar, IonContent, IonCard, IonCardHeader, IonCardTitle, IonCardContent, IonAvatar, IonList, IonItem, IonLabel, IonButton, IonIcon, IonGrid, IonRow, IonCol, IonText } from '@ionic/angular/standalone';
+import { IonHeader, IonToolbar, IonContent, IonCard, IonCardHeader, IonCardTitle, IonCardContent, IonAvatar, IonList, IonItem, IonLabel, IonButton, IonIcon, IonGrid, IonRow, IonCol, IonText, IonInput, AlertController } from '@ionic/angular/standalone';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { HeaderComponent } from '../components/header/header.component';
-import { UserSrv } from '../services/user';
 import { AuthSrv } from '../services/auth';
 import { personOutline, statsChartOutline, settingsOutline, pencilOutline, lockClosedOutline, logOutOutline } from 'ionicons/icons';
-
-interface User {
-  id: number;
-  name: string;
-  email: string;
-  age: number;
-}
 
 @Component({
   selector: 'app-profil',
   templateUrl: 'profil.page.html',
   styleUrls: ['profil.page.scss'],
   standalone: true,
-  imports: [CommonModule, IonHeader, IonToolbar, IonContent, IonCard, IonCardHeader, IonCardTitle, IonCardContent, IonAvatar, IonList, IonItem, IonLabel, IonButton, IonIcon, IonGrid, IonRow, IonCol, IonText, HeaderComponent],
+  imports: [CommonModule, FormsModule, IonHeader, IonToolbar, IonContent, IonCard, IonCardHeader, IonCardTitle, IonCardContent, IonAvatar, IonList, IonItem, IonLabel, IonButton, IonIcon, IonGrid, IonRow, IonCol, IonText, IonInput, HeaderComponent],
 })
-
-export class ProfilPage {
-  private userService: UserSrv = inject(UserSrv);
+export class ProfilPage implements OnInit {
   private http = inject(HttpClient);
+  private authService = inject(AuthSrv);
+  private alertCtrl = inject(AlertController);
   
-  userProfil : User = this.userService.getUsers()[0];
+  user: any = { username: '', email: '' };
+  userBackup: any = {}; // Pour annuler les modifs
+  isEditing: boolean = false;
   userInitials: string = 'U';
+  stats = { exercices: 0, articles: 0, minutes: 0 };
 
-  stats = {
-    exercices: 0,
-    articles: 0,
-    minutes: 0
-  };
-
-  // Icons
   personOutline = personOutline;
   statsChartOutline = statsChartOutline;
   settingsOutline = settingsOutline;
@@ -44,41 +33,85 @@ export class ProfilPage {
   lockClosedOutline = lockClosedOutline;
   logOutOutline = logOutOutline;
 
-  constructor(private authService: AuthSrv) {}
-  
+  ngOnInit() {
+    this.loadProfile();
+  }
+
   ionViewWillEnter() {
     this.chargerStatistiques();
   }
-  
+
+  loadProfile() {
+    this.authService.getProfile().subscribe({
+      next: (res: any) => {
+        this.user = res;
+        this.userBackup = { ...res }; // On garde une copie
+        this.userInitials = this.getInitials(res.username);
+      },
+      error: (err: any) => console.error('Erreur profil:', err)
+    });
+  }
+
+  toggleEdit() {
+    this.isEditing = true;
+  }
+
+  cancelEdit() {
+    this.isEditing = false;
+    this.user = { ...this.userBackup }; // On restaure les données d'origine
+  }
+
+  onUpdateProfile() {
+    this.authService.updateProfile(this.user).subscribe({
+      next: () => {
+        this.isEditing = false;
+        this.userBackup = { ...this.user }; // On met à jour la sauvegarde
+        this.userInitials = this.getInitials(this.user.username);
+        window.alert('Profil mis à jour !');
+      },
+      error: () => window.alert('Erreur lors de la mise à jour.')
+    });
+  }
+
+  async openChangePassword() {
+    const alertPopup = await this.alertCtrl.create({ // On utilise alertPopup
+      header: 'Sécurité',
+      subHeader: 'Changer le mot de passe',
+      inputs: [
+        { name: 'old_password', type: 'password', placeholder: 'Ancien mot de passe' },
+        { name: 'new_password', type: 'password', placeholder: 'Nouveau mot de passe' }
+      ],
+      buttons: [
+        { text: 'Annuler', role: 'cancel' },
+        {
+          text: 'Confirmer',
+          handler: (data) => {
+            this.authService.changePassword(data).subscribe({
+              next: () => window.alert('Mot de passe modifié !'), // window. obligatoire
+              error: (err: any) => window.alert('Erreur: ' + (err.error?.detail || 'Échec'))
+            });
+          }
+        }
+      ]
+    });
+    await alertPopup.present();
+  }
+
   chargerStatistiques() {
     const token = localStorage.getItem('access_token');
     if (!token) return;
-
-    const headers = new HttpHeaders({
-      'Authorization': `Bearer ${token}`
-    });
-
+    const headers = new HttpHeaders({ 'Authorization': `Bearer ${token}` });
     this.http.get<any>(`${environment.apiUrl}/profil/stats/`, { headers }).subscribe({
-      next: (data) => {
-        this.stats = data; // Met à jour l'interface avec les vrais chiffres
-      },
+      next: (data) => this.stats = data,
       error: (err) => console.error('Erreur stats:', err)
     });
   }
-  seDeconnecter(){
-    this.authService.logout();
-  }
 
-  private getInitials(name: string | undefined): string {
-    if (!name || name.trim() === '') {
-      return 'U';
-    }
+  seDeconnecter() { this.authService.logout(); }
 
-    const words = name.trim().split(' ');
-    if (words.length === 1) {
-      return words[0].charAt(0).toUpperCase();
-    } else {
-      return (words[0].charAt(0) + words[1].charAt(0)).toUpperCase();
-    }
+  private getInitials(name: string): string {
+    if (!name) return 'U';
+    const parts = name.trim().split(' ');
+    return parts.length > 1 ? (parts[0][0] + parts[1][0]).toUpperCase() : parts[0][0].toUpperCase();
   }
 }

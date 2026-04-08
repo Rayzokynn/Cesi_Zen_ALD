@@ -1,6 +1,7 @@
 from django.contrib.auth.hashers import make_password
 from rest_framework import serializers
 from .models import ArticleInfo, Utilisateur, SessionRespiration
+from django.contrib.auth.models import User
 
 class UtilisateurSerializer(serializers.ModelSerializer):
     class Meta:
@@ -29,5 +30,13 @@ class SessionRespirationSerializer(serializers.ModelSerializer):
 class ArticleSerializer(serializers.ModelSerializer):
     class Meta:
         model = ArticleInfo
-        fields = '__all__' # Si c'est comme ça, c'est parfait !
-        # OU fields = ['id', 'titre', 'contenu', 'date_publi', 'imageUrl', ...]
+        fields = '__all__'
+
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Utilisateur
+        fields = ['id', 'pseudo', 'email']
+
+class ChangePasswordSerializer(serializers.Serializer):
+    old_password = serializers.CharField(required=True)
+    new_password = serializers.CharField(required=True)
