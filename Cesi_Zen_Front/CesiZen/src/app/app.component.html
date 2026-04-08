@@ -1,3 +1,52 @@
 <ion-app>
-  <ion-router-outlet></ion-router-outlet>
+  <ion-split-pane contentId="main-content" when="md">
+    
+    <ion-menu contentId="main-content" type="overlay" class="cesizen-menu">
+      <ion-header class="ion-no-border">
+        <ion-toolbar>
+          <ion-title style="color: #00a878; font-weight: bold;">CESIZen</ion-title>
+        </ion-toolbar>
+      </ion-header>
+      
+      <ion-content class="menu-content">
+        <ion-list lines="none" class="menu-list">
+          <ion-menu-toggle auto-hide="false">
+            
+            <ion-item routerLink="/tabs/tab1" routerDirection="root" routerLinkActive="selected">
+              <ion-icon slot="start" name="home-outline"></ion-icon>
+              <ion-label>Accueil</ion-label>
+            </ion-item>
+                        
+            <ion-item routerLink="/tabs/tab2" routerDirection="root" routerLinkActive="selected">
+              <ion-icon slot="start" name="leaf-outline"></ion-icon>
+              <ion-label>Respiration</ion-label>
+            </ion-item>
+            
+            <ion-item routerLink="/tabs/tab3" routerDirection="root" routerLinkActive="selected">
+              <ion-icon slot="start" name="person-outline"></ion-icon>
+              <ion-label>Mon Profil</ion-label>
+            </ion-item>
+            
+          </ion-menu-toggle>
+        </ion-list>
+      </ion-content>
+
+      <ion-footer class="ion-no-border menu-footer">
+        <div class="legal-links">
+          <a routerLink="/cgu" routerDirection="forward">CGU</a>
+          <span class="separator">•</span>
+          <a routerLink="/mentions-legales" routerDirection="forward">Mentions</a>
+          <span class="separator">•</span>
+          <a routerLink="/contact" routerDirection="forward">Contact</a>
+        </div>
+        <div class="copyright">
+          © 2026 CESIZen. Tous droits réservés.
+        </div>
+      </ion-footer>
+      
+    </ion-menu>
+
+    <ion-router-outlet id="main-content"></ion-router-outlet>
+
+  </ion-split-pane>
 </ion-app>

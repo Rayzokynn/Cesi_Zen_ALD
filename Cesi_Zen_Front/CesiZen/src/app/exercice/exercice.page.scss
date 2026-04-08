@@ -22,6 +22,7 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
+  margin: 0 auto;
 }
 
 .header {
@@ -123,12 +124,12 @@ body {
     border-radius: 12px;
     padding: 1rem;
     margin-bottom: 0.8rem;
+    color: black;
     cursor: pointer;
 
     h3 { margin: 0 0 0.3rem 0; font-size: 1rem; }
     p { margin: 0; font-size: 0.8rem; color: $text-light; }
 
-    // État actif de la carte
     &.active {
       background-color: $primary-color;
       border-color: $primary-color;

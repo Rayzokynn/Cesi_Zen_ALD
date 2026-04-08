@@ -1,0 +1,46 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/tabs/tab1" text="Retour"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Contactez-nous</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding contact-content">
+  <div class="container">
+    <h1>Nous sommes à votre écoute</h1>
+    <p class="subtitle">Remplissez le formulaire ci-dessous pour nous envoyer votre message.</p>
+
+    <ion-list class="form-list" lines="none">
+      <ion-item class="custom-input">
+        <ion-label position="stacked">Nom complet <ion-text color="danger">*</ion-text></ion-label>
+        <ion-input type="text" placeholder="Votre nom"></ion-input>
+      </ion-item>
+
+      <ion-item class="custom-input">
+        <ion-label position="stacked">Adresse email <ion-text color="danger">*</ion-text></ion-label>
+        <ion-input type="email" placeholder="votre.email@exemple.fr"></ion-input>
+      </ion-item>
+
+      <ion-item class="custom-input">
+        <ion-label position="stacked">Message <ion-text color="danger">*</ion-text></ion-label>
+        <ion-textarea rows="6" placeholder="Décrivez votre demande..."></ion-textarea>
+      </ion-item>
+    </ion-list>
+
+    <ion-button expand="block" color="primary" class="ion-margin-top submit-btn">
+      <ion-icon slot="start" name="mail-outline"></ion-icon>
+      Envoyer le message
+    </ion-button>
+
+    <h2 class="ion-margin-top">Autres moyens de nous contacter</h2>
+    <ion-card class="highlight-card">
+      <ion-card-content>
+        <p><ion-icon name="mail-outline"></ion-icon> <strong>Email :</strong> contact@cesizen.fr</p>
+        <p><ion-icon name="call-outline"></ion-icon> <strong>Téléphone :</strong> +33 (0) 1 23 45 67 89</p>
+        <p><ion-icon name="location-outline"></ion-icon> <strong>Adresse :</strong> Paris, France</p>
+      </ion-card-content>
+    </ion-card>
+  </div>
+</ion-content>

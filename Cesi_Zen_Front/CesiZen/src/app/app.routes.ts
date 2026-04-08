@@ -20,4 +20,16 @@ export const routes: Routes = [
     path: 'article-detail/:id',
     loadComponent: () => import('./article-detail/article-detail.page').then( m => m.ArticleDetailPage)
   },
+  {
+    path: 'cgu',
+    loadComponent: () => import('./cgu/cgu.page').then( m => m.CguPage)
+  },
+  {
+    path: 'mentions-legales',
+    loadComponent: () => import('./mentions-legales/mentions-legales.page').then( m => m.MentionsLegalesPage)
+  },
+  {
+    path: 'contact',
+    loadComponent: () => import('./contact/contact.page').then( m => m.ContactPage)
+  },
 ];

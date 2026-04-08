@@ -1,34 +1,28 @@
-// --- HEADER ---
-.custom-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 10px 15px;
-
-  .logo-left {
-    height: 45px;
-    width: auto;
-    object-fit: contain;
-  }
-
-  .header-title {
-    font-size: 1.8rem;
-    font-weight: 500;
-    margin: 0;
-    color: #000;
-    flex-grow: 1;
-    text-align: center;
-  }
-
-  .logo-right {
-    height: 40px;
-    width: auto;
-    object-fit: contain;
-  }
+ion-menu {
+  --background: #fcfdfc;
+  --border-color: #c8ebd9;
 }
 
-.header-divider {
-  height: 1px;
-  background-color: #000;
-  margin: 0 15px;
+ion-item {
+  --color: #005c4a;
+  --padding-start: 1rem;
+  margin-bottom: 5px;
+  font-weight: 500;
+  border-radius: 0 25px 25px 0;
+  margin-right: 15px;
+  transition: all 0.2s ease;
+}
+
+ion-item.selected {
+  --background: rgba(0, 168, 120, 0.1);
+  --color: #00a878;
+  font-weight: 700;
+  border-left: 4px solid #00a878;
+}
+
+ion-item ion-icon {
+  color: #5ba38e;
+}
+ion-item.selected ion-icon {
+  color: #00a878;
 }

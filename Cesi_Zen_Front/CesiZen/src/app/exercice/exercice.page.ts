@@ -17,6 +17,6 @@ export class ExercicePage {
   constructor(public respirationService: RespirationService) {}
 
   ionViewWillLeave() {
-    this.respirationService.resetExercise(); // Arrête l'exercice si on quitte la page
+    this.respirationService.resetExercise();
   }
 }
