@@ -1,0 +1,82 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar>
+    <app-header></app-header>
+    <ion-searchbar 
+      placeholder="Rechercher un article..." 
+      (ionInput)="rechercherArticle($event)" 
+      class="custom-searchbar"
+      animated="true"
+      mode="ios"> </ion-searchbar>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-list lines="none" class="articles-container">
+
+    @for (article of articles; track article.id) {
+      <ion-card class="custom-article-card" (click)="lireArticle(article.id)" button="true">
+        <div class="image-container">
+          <img [src]="article.imageUrl" [alt]="article.titre" class="article-img">
+        </div>
+        
+        <ion-card-header>
+          <ion-card-title class="article-title">{{ article.titre }}</ion-card-title>
+        </ion-card-header>
+      </ion-card>
+    } @if (chargement) {
+      @for (i of [1, 2, 3]; track i) {
+        <ion-card>
+          <ion-skeleton-text [animated]="true" style="width: 100%; height: 150px;"></ion-skeleton-text>
+          <ion-card-header>
+            <ion-skeleton-text [animated]="true" style="width: 60%; height: 20px;"></ion-skeleton-text>
+          </ion-card-header>
+        </ion-card>
+      }
+    }
+
+  </ion-list>
+  <!--
+  <app-title [title] = "'Mon Titre'"></app-title>
+  <app-title [title] = "namePage"></app-title>
+
+
+  <ion-button expand = block shape="round" color="success" (click)="getCatImage()">Afficher une image de chat</ion-button>
+  <ion-button expand = block shape="round" color="secondary" (click)="saveImage()">Sauvegarder l'image</ion-button>
+  <ion-button expand = block shape="round" color="danger" (click)="loadImage()">Charger l'image</ion-button>
+  @if (image != "") {
+    <ion-card>
+    <img [src]="image" alt="Photo de chat">
+    </ion-card>
+  }
+
+  @if (listImages.length > 0) {
+    @for (imgSrc of listImages; track imgSrc) {
+      <ion-card >
+        <img alt="Photo de chat sauvegardée" [src]="imgSrc" >
+      </ion-card>
+    }
+  }
+
+  
+  <ion-label> Changez l'image : </ion-label>
+  <ion-input type="text" [(ngModel)]="imageSrc"></ion-input>
+
+  @if (imageSrc=="") {
+    <p>Aucune image</p>
+  }
+  <img [src]="imageSrc" alt="image">
+  
+  <ul>
+    @for (fruit of listFruits; track fruit){
+      <li>{{ fruit }}</li>
+    }
+  </ul>
+
+  <ion-button (click)="clickMe()">Cliquez ici</ion-button>
+
+  <ion-button id="open-toast" expand="block">Open</ion-button>
+  <p id="message">This toast example uses triggers to automatically open a toast when the button is clicked.</p>
+  <ion-toast trigger="open-toast" message="Ceci est un toast" [duration]="5000"></ion-toast>
+  -->
+
+</ion-content>

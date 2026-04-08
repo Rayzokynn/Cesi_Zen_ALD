@@ -1,0 +1,344 @@
+// Palette de couleurs cohérente
+$bg-color: #f1fbf5;
+$primary-color: #00a878;
+$primary-dark: #008f66;
+$text-dark: #005c4a;
+$text-light: #5ba38e;
+$card-bg: #f5fcf8;
+$card-border: #c8ebd9;
+$white: #ffffff;
+$error-color: #e74c3c;
+$input-border: #d5e8db;
+
+.login-content {
+  --background: #{$bg-color};
+  --padding-top: 0;
+  --padding-bottom: 0;
+  --padding-start: 0;
+  --padding-end: 0;
+}
+
+.header-spacer {
+  height: 1rem;
+}
+
+.login-container {
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 2rem 1.5rem;
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+// Logo Section
+.logo-section {
+  text-align: center;
+  margin-bottom: 3rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  animation: slideDown 0.6s ease-out;
+
+  .logo {
+    width: 120px;
+    height: 120px;
+    margin-bottom: 1.5rem;
+    filter: drop-shadow(0 4px 12px rgba(0, 168, 120, 0.2));
+  }
+
+  .app-title {
+    font-size: 2rem;
+    font-weight: 700;
+    color: $text-dark;
+    margin: 0 0 0.5rem 0;
+    letter-spacing: 1px;
+  }
+
+  .app-subtitle {
+    font-size: 1rem;
+    color: $text-light;
+    margin: 0;
+    font-weight: 500;
+  }
+}
+
+// Login Card
+.login-card {
+  --background: #{$card-bg};
+  border: 2px solid #{$card-border};
+  border-radius: 16px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+  width: 100%;
+  margin: 0;
+  animation: slideUp 0.6s ease-out;
+
+  .card-content {
+    padding: 2rem 1.5rem;
+    --padding-start: 0;
+    --padding-end: 0;
+    --padding-top: 0;
+    --padding-bottom: 0;
+  }
+}
+
+// Form Title
+.form-title {
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: $text-dark;
+  margin: 0 0 0.5rem 0;
+  text-align: center;
+}
+
+.form-subtitle {
+  font-size: 0.9rem;
+  color: $text-light;
+  margin: 0 0 2rem 0;
+  text-align: center;
+}
+
+// Form
+.login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+// Custom Input Items
+.custom-input-item {
+  --padding-start: 0;
+  --padding-end: 0;
+  --padding-top: 0.5rem;
+  --padding-bottom: 0.5rem;
+  --background: transparent;
+  --border-bottom: 2px solid #{$input-border};
+  --highlight-background: transparent;
+  --highlight-color-focused: #{$primary-color};
+  margin-bottom: 0.5rem;
+
+  &:hover {
+    --border-bottom: 2px solid #{$primary-color};
+  }
+
+  &.ion-focused {
+    --border-bottom: 2px solid #{$primary-color};
+  }
+}
+
+// Input Label
+.input-label {
+  font-size: 0.9rem;
+  color: $text-light;
+  font-weight: 500;
+  --color-focused: #{$primary-color};
+  margin-bottom: 15px;
+}
+
+// Custom Input
+.custom-input {
+  font-size: 1rem;
+  color: $text-dark;
+  --padding-start: 0.5rem;
+  --placeholder-color: #{$text-light};
+  --placeholder-opacity: 0.7;
+}
+
+// Input Icon
+.input-icon {
+  font-size: 1.4rem;
+  color: $primary-color;
+  margin-right: 0.8rem;
+}
+
+// Toggle Password Button
+.toggle-password {
+  --background: transparent;
+  --color: $primary-color;
+  margin: 0 0.5rem 0 0.8rem;
+
+  .toggle-icon {
+    font-size: 1.2rem;
+  }
+}
+
+// Error Note
+.error-note {
+  color: $error-color;
+  font-size: 0.8rem;
+  font-weight: 500;
+  display: block;
+  margin-top: -1rem;
+}
+
+// Login Button
+.login-button {
+  --background: #{$primary-color};
+  --color: #{$white};
+  --border-radius: 8px;
+  --padding-start: 1.5rem;
+  --padding-end: 1.5rem;
+  height: 48px;
+  font-weight: 600;
+  font-size: 1rem;
+  letter-spacing: 0.5px;
+  margin-top: 1rem;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(0, 168, 120, 0.3);
+
+  &:hover:not(:disabled) {
+    --background: #{$primary-dark};
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(0, 168, 120, 0.4);
+  }
+
+  &:active:not(:disabled) {
+    transform: translateY(0);
+  }
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+
+  .spinner {
+    color: $white;
+    height: 20px;
+    width: 20px;
+  }
+}
+
+// Form Footer
+.form-footer {
+  margin-top: 2rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid #{$card-border};
+  text-align: center;
+}
+
+.footer-text {
+  font-size: 0.85rem;
+  color: $text-light;
+  margin: 0.8rem 0;
+
+  .link {
+    color: $primary-color;
+    text-decoration: none;
+    font-weight: 600;
+    transition: all 0.2s ease;
+
+    &:hover {
+      color: $primary-dark;
+      text-decoration: underline;
+    }
+  }
+}
+
+// Animations
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+// Responsive Design
+@media (max-width: 480px) {
+  .login-container {
+    padding: 1rem 1rem;
+    min-height: 100vh;
+    justify-content: flex-start;
+    padding-top: 2rem;
+  }
+
+  .logo-section {
+    margin-bottom: 2rem;
+
+    .logo {
+      width: 100px;
+      height: 100px;
+    }
+
+    .app-title {
+      font-size: 1.6rem;
+    }
+
+    .app-subtitle {
+      font-size: 0.9rem;
+    }
+  }
+
+  .login-card {
+    border-radius: 12px;
+
+    .card-content {
+      padding: 1.5rem 1.2rem;
+    }
+  }
+
+  .form-title {
+    font-size: 1.4rem;
+  }
+
+  .form-subtitle {
+    font-size: 0.85rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .login-form {
+    gap: 1.2rem;
+  }
+
+  .login-button {
+    height: 44px;
+    font-size: 0.95rem;
+  }
+
+  .form-footer {
+    margin-top: 1.5rem;
+    padding-top: 1rem;
+  }
+
+  .footer-text {
+    font-size: 0.8rem;
+    margin: 0.6rem 0;
+  }
+}
+
+// Dark mode support (optional)
+@media (prefers-color-scheme: dark) {
+  .login-content {
+    --background: #0a2e23;
+  }
+
+  .login-card {
+    --background: #1a4a3a;
+    border-color: #2a6a5a;
+  }
+
+  .input-label {
+    color: #a7e4c9;
+  }
+
+  .custom-input {
+    color: #e0f5ed;
+  }
+}

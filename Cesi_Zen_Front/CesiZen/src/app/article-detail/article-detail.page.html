@@ -1,0 +1,22 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/tabs" text="Retour"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Ressource</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <div *ngIf="article" class="article-full-container">
+    
+    <h1 class="main-title">{{ article.titre }}</h1>
+
+    <div class="main-image-wrapper">
+      <img [src]="article.imageUrl" [alt]="article.titre" class="responsive-img">
+    </div>
+
+    <div class="content-body" [innerHTML]="article.contenu"></div>
+
+  </div>
+</ion-content>

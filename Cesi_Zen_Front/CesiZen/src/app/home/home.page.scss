@@ -1,0 +1,85 @@
+// --- CONTENU (ARTICLES) ---
+.articles-container {
+  padding: 30px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+}
+
+.article-card {
+  display: flex;
+  flex-direction: column;
+
+  .image-placeholder {
+    width: calc(100% - 15px);
+    margin-left: 15px;
+    height: 220px;
+    background-color: #000;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    &::before {
+      content: '';
+      position: absolute;
+      top: -15px;
+      left: -15px;
+      width: 100%;
+      height: 100%;
+      border: 8px solid #000;
+      background-color: transparent;
+      z-index: -1;
+    }
+
+    ion-icon {
+      font-size: 5rem;
+      color: white;
+    }
+  }
+
+  .article-title {
+    margin-top: 15px;
+    margin-left: 15px;
+    font-size: 1.4rem;
+    font-weight: normal;
+    color: #000;
+  }
+}
+
+.image-placeholder {
+  // ... (Garde ton code existant avec le background noir et le ::before) ...
+
+  // Ajoute ceci pour l'image :
+  ion-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; // L'image va remplir le carré sans être écrasée
+    z-index: 1;        // Assure que l'image reste au-dessus du fond noir
+  }
+}
+
+.custom-article-card {
+  margin-bottom: 20px;
+  border-radius: 15px;
+  overflow: hidden;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+
+  .image-container {
+    width: 100%;
+    height: 150px; // <-- Ajuste cette valeur pour réduire la taille (ex: 120px ou 150px)
+    overflow: hidden;
+
+    .article-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover; // Permet de remplir le cadre sans déformer l'image
+    }
+  }
+
+  .article-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--ion-text-color);
+  }
+}
