@@ -50,6 +50,9 @@
   }
 }
 
+ion-split-pane.split-pane-disabled {
+  --side-width: 0px;
+}
 .menu-footer {
   background: transparent;
   padding: 15px 10px 20px 10px;
