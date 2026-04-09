@@ -4,6 +4,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { AuthSrv } from '../services/auth';
+import { MenuController } from '@ionic/angular';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import {IonContent, IonCard, IonCardContent, IonInput, IonButton, IonIcon, IonItem, IonLabel, IonNote, IonSpinner} from '@ionic/angular/standalone';
 import { lockClosedOutline, mailOutline, personOutline } from 'ionicons/icons';
@@ -27,11 +28,20 @@ export class ConnexionPage implements OnInit {
   personOutline = personOutline;
 
   constructor(
+    private menuCtrl: MenuController,
     private formBuilder: FormBuilder,
     private authService: AuthSrv,
     private router: Router
   ) {
     addIcons({ eye, 'eye-off': eyeOff });
+  }
+
+  ionViewWillEnter() {
+    this.menuCtrl.enable(false);
+  }
+
+  ionViewWillLeave() {
+    this.menuCtrl.enable(true);
   }
 
   private initializeForm() {

@@ -1,7 +1,7 @@
 <ion-app>
   <ion-split-pane contentId="main-content" when="md">
     
-    <ion-menu contentId="main-content" type="overlay" class="cesizen-menu">
+    <ion-menu [disabled]="isMenuDisabled" contentId="main-content" type="overlay" class="cesizen-menu">
       <ion-header class="ion-no-border">
         <ion-toolbar>
           <ion-title style="color: #00a878; font-weight: bold;">CESIZen</ion-title>
