@@ -145,4 +145,5 @@ REST_FRAMEWORK = {
 
     )
 }
+# pylint: disable=invalid-name
 CORS_ALLOW_ALL_ORIGINS = True

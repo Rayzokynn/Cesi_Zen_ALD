@@ -87,6 +87,14 @@ class ChangePasswordSerializer(serializers.Serializer):
     old_password = serializers.CharField(required=True)
     new_password = serializers.CharField(required=True)
 
+    def create(self, validated_data):
+        """Non utilisé pour ce sérialiseur."""
+        raise NotImplementedError("create() n'est pas supporté par ce sérialiseur.")
+
+    def update(self, instance, validated_data):
+        """Non utilisé pour ce sérialiseur."""
+        raise NotImplementedError("update() n'est pas supporté par ce sérialiseur.")
+
 
 class UpdateProfileSerializer(serializers.ModelSerializer):
     """Sérialiseur pour la mise à jour du profil utilisateur."""

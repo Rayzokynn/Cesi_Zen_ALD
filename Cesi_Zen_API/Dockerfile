@@ -6,6 +6,8 @@ RUN apt-get update && apt-get upgrade -y && apt-get install -y --no-install-reco
     pkg-config \
     default-libmysqlclient-dev \
     && rm -rf /var/lib/apt/lists/*
+RUN pip install pylint pylint-django
+
 COPY requirements.txt .
 
 RUN pip install --no-cache-dir -r requirements.txt
