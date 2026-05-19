@@ -36,10 +36,8 @@ class ProfilTests(APITestCase):
             'pseudo': 'NouveauPseudo',
             'email': 'nouveau@cesizen.fr'
         }
-        response = self.client.put(self.update_profile_url, data)
-        
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        
+        response = self.client.put(self.update_profile_url, data)        
+        self.assertEqual(response.status_code, status.HTTP_200_OK)       
         self.user.refresh_from_db()
         self.assertEqual(self.user.pseudo, 'NouveauPseudo')
         self.assertEqual(self.user.email, 'nouveau@cesizen.fr')
@@ -83,7 +81,7 @@ class ProfilTests(APITestCase):
         response = self.client.put(self.change_password_url, data)
 
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-        
+       
         self.user.refresh_from_db()
         self.assertTrue(self.user.check_password('Password123!'))
 
