@@ -18,6 +18,9 @@ services:
       - cesi-db
     networks:
       - cesizen-network
+    labels:
+      - "wud.watch=true"
+      - "wud.tag.include=^latest$$"
 
   # Frontend Web (Nginx serving Ionic build)
   frontend:
@@ -30,6 +33,9 @@ services:
       - backend
     networks:
       - cesizen-network
+    labels:
+      - "wud.watch=true"
+      - "wud.tag.include=^latest$$"
 
   # Base de données MySQL
   cesi-db:
@@ -43,6 +49,24 @@ services:
       - ./db_data:/var/lib/mysql
     ports:
       - "3306:3306"
+    networks:
+      - cesizen-network
+
+  # Outil de mise à jour automatique (What's Up Docker)
+  wud:
+    image: ghcr.io/getwud/wud:latest
+    container_name: cesizen-wud
+    restart: always
+    ports:
+      - "3000:3000"
+    environment:
+      - WUD_WATCHER_LOCAL_WATCHBYDEFAULT=false
+      - WUD_WATCHER_LOCAL_CRON=*/5 * * * *
+      - WUD_TRIGGER_DOCKER_AUTOUPDATE_AUTO=true
+      - WUD_TRIGGER_DOCKER_AUTOUPDATE_PRUNE=true
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ~/.docker/config.json:/root/.docker/config.json:ro
     networks:
       - cesizen-network
 
