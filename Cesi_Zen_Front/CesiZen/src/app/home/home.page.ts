@@ -22,6 +22,8 @@ interface Article {
 })
 
 export class HomePage implements OnInit {
+  private respirationService = inject(RespirationService);
+
   private router: Router = inject(Router);
   private alertController: AlertController = inject(AlertController);
   private articleService: ArticleService = inject(ArticleService);
@@ -34,7 +36,7 @@ export class HomePage implements OnInit {
   tousLesArticles: Article[] = [];
   articles: Article[] = [];
 
-  constructor(private respirationService: RespirationService) {
+  constructor() {
     console.log('Constructeur  Page');
   }
 
