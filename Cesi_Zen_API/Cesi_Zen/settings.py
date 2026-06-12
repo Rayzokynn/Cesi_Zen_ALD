@@ -82,12 +82,12 @@ WSGI_APPLICATION = 'Cesi_Zen.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': env.str('engine'),
-        'NAME': env.str('name'),
-        'USER': env.str('user'),
-        'PASSWORD': env.str('password'),
-        'HOST': env.str('host'),
-        'PORT': env.str('port'),
+        'ENGINE': env.str('engine', default='django.db.backends.sqlite3'),
+        'NAME': env.str('name', default=str(BASE_DIR / 'db.sqlite3')),
+        'USER': env.str('user', default=''),
+        'PASSWORD': env.str('password', default=''),
+        'HOST': env.str('host', default=''),
+        'PORT': env.str('port', default=''),
     }
 }
 
