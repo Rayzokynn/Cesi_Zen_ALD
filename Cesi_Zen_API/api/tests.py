@@ -1,9 +1,8 @@
 from rest_framework.test import APITestCase
 from rest_framework import status
 from django.urls import reverse
-from django.contrib.auth import get_user_model
-
-Utilisateur = get_user_model()
+from django.contrib.auth.hashers import make_password, check_password
+from .models import Utilisateur
 
 class ProfilTests(APITestCase):
     def setUp(self):
@@ -11,16 +10,16 @@ class ProfilTests(APITestCase):
         Cette méthode s'exécute AVANT chaque test. 
         On y prépare notre base de données de test (qui est détruite à la fin).
         """
-        self.user = Utilisateur.objects.create_user(
+        self.user = Utilisateur.objects.create(
             email='test@cesizen.fr',
             pseudo='TestUser',
-            password='Password123!'
+            password=make_password('Password123!')
         )
 
-        self.other_user = Utilisateur.objects.create_user(
+        self.other_user = Utilisateur.objects.create(
             email='autre@cesizen.fr',
             pseudo='AutreUser',
-            password='Password123!'
+            password=make_password('Password123!')
         )
 
         self.client.force_authenticate(user=self.user)
@@ -68,7 +67,7 @@ class ProfilTests(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
         self.user.refresh_from_db()
-        self.assertTrue(self.user.check_password('NouveauPassword456!'))
+        self.assertTrue(check_password('NouveauPassword456!', self.user.password))
 
     def test_change_password_wrong_old_password(self):
         """
@@ -83,7 +82,7 @@ class ProfilTests(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
        
         self.user.refresh_from_db()
-        self.assertTrue(self.user.check_password('Password123!'))
+        self.assertTrue(check_password('Password123!', self.user.password))
 
     def test_unauthenticated_user_access(self):
         """
