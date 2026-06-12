@@ -1,5 +1,5 @@
-import { Component, CUSTOM_ELEMENTS_SCHEMA, inject } from '@angular/core';
-import { IonHeader, IonToolbar, IonContent, IonCard, AlertController} from '@ionic/angular/standalone';
+import { Component, CUSTOM_ELEMENTS_SCHEMA, inject, OnInit } from '@angular/core';
+import { IonHeader, IonToolbar, IonContent, IonCard, AlertController, } from '@ionic/angular/standalone';
 import { HeaderComponent } from '../components/header/header.component';
 import { FormsModule } from '@angular/forms';
 import { Preferences } from '@capacitor/preferences';
@@ -21,7 +21,7 @@ interface Article {
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 
-export class HomePage {
+export class HomePage implements OnInit {
   private router: Router = inject(Router);
   private alertController: AlertController = inject(AlertController);
   private articleService: ArticleService = inject(ArticleService);
