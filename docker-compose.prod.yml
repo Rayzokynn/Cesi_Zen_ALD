@@ -1,0 +1,48 @@
+services:
+  # Backend API (Django + Gunicorn)
+  backend:
+    image: ghcr.io/${REPO_LOWER}/cesizen-backend:latest
+    container_name: cesizen-backend-prod
+    restart: always
+    ports:
+      - "8000:8000"
+    environment:
+      - DJANGO_SETTINGS_MODULE=Cesi_Zen.settings
+      - DB_HOST=cesi-db
+    depends_on:
+      - cesi-db
+    networks:
+      - cesizen-network
+
+  # Frontend Web (Nginx serving Ionic build)
+  frontend:
+    image: ghcr.io/${REPO_LOWER}/cesizen-frontend:latest
+    container_name: cesizen-frontend-prod
+    restart: always
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+    networks:
+      - cesizen-network
+
+  # Base de données MySQL
+  cesi-db:
+    image: mysql:8.4
+    container_name: cesi-db
+    restart: always
+    environment:
+      MYSQL_DATABASE: cesi_zen_bdd
+      MYSQL_USER: root
+      MYSQL_PASSWORD: root
+      MYSQL_ROOT_PASSWORD: rootpassword
+    volumes:
+      - ./db_data:/var/lib/mysql
+    ports:
+      - "3306:3306"
+    networks:
+      - cesizen-network
+
+networks:
+  cesizen-network:
+    driver: bridge
