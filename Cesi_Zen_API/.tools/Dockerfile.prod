@@ -17,6 +17,8 @@ RUN pip install --no-cache-dir -r requirements.txt
 # --- Stage 2: Final Runtime ---
 FROM python:3.12-slim
 
+LABEL org.opencontainers.image.source=https://github.com/Rayzokynn/Cesi_Zen_ALD
+
 # Création d'un utilisateur non-root pour la sécurité
 RUN useradd --create-home appuser
 WORKDIR /home/appuser/app

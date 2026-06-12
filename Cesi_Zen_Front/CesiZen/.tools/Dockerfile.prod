@@ -9,6 +9,8 @@ RUN npm run build
 # --- Stage 2: Runtime (Production) ---
 FROM nginx:alpine
 
+LABEL org.opencontainers.image.source=https://github.com/Rayzokynn/Cesi_Zen_ALD
+
 # 1. Copie des fichiers compilés
 COPY --from=builder /app/www /usr/share/nginx/html
 
