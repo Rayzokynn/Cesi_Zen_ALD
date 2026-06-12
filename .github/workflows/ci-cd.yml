@@ -138,11 +138,6 @@ jobs:
       contents: read
       packages: read
     steps:
-      - name: Verify Runner (Touch Test)
-        run: |
-          touch ~/runner_test.txt
-          echo "Runner completed touch test at $(date)" > ~/runner_test.txt
-
       - name: Checkout Code
         uses: actions/checkout@v6
 
