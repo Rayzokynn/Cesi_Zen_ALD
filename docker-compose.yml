@@ -1,0 +1,84 @@
+services:
+  # Backend API
+  backend:
+    build:
+      context: ./Cesi_Zen_API
+      dockerfile: .tools/Dockerfile.prod
+    container_name: cesizen-backend-prod
+    restart: always
+    ports:
+      - "8000:8000"
+    environment:
+      - DJANGO_SETTINGS_MODULE=Cesi_Zen.settings
+      - DB_HOST=cesi-db
+    networks:
+      - cesizen-network
+
+
+  # Frontend Web
+  frontend:
+    build:
+      context: ./Cesi_Zen_Front/CesiZen
+      dockerfile: .tools/Dockerfile.prod
+    container_name: cesizen-frontend-prod
+    restart: always
+    ports:
+      - "80:80"
+    networks:
+      - cesizen-network
+
+  cesi-db:
+    image: mysql:8.4
+    container_name: cesi-db
+    restart: always
+    environment:
+      MYSQL_DATABASE: cesi_zen_bdd
+      MYSQL_USER: root
+      MYSQL_PASSWORD: root
+      MYSQL_ROOT_PASSWORD: rootpassword
+    volumes:
+      - ./db_data:/var/lib/mysql
+    ports:
+      - "3306:3306"
+    networks:
+      - cesizen-network
+  
+  linter:
+    build:
+      context: ./.tools
+      dockerfile: Dockerfile.lint
+    container_name: cesizen-linter
+    volumes:
+      - .:/app
+    # Le conteneur reste en vie pour permettre à la pipeline d'exécuter des commandes
+    tty: true
+    networks:
+      - cesizen-network
+  
+  tests-backend:
+    build:
+      context: ./Cesi_Zen_API
+      dockerfile: .tools/Dockerfile.test
+    container_name: cesizen-tests
+    environment:
+      - DJANGO_SETTINGS_MODULE=Cesi_Zen.settings
+      - DB_HOST=cesi-db
+    networks:
+      - cesizen-network
+
+  trivy:
+    image: aquasec/trivy:latest
+    container_name: cesizen-trivy
+    volumes:
+      # Indispensable pour que Trivy puisse scanner les images locales de ton PC
+      - /var/run/docker.sock:/var/run/docker.sock
+      # Optionnel : pour mettre en cache les définitions de pannes et aller plus vite
+      - trivy-cache:/root/.cache
+    entrypoint: ["trivy", "image", "--severity", "HIGH,CRITICAL"]
+
+volumes:
+  trivy-cache:
+
+networks:
+  cesizen-network:
+    driver: bridge
