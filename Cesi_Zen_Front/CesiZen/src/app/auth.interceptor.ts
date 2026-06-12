@@ -7,9 +7,21 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
   // TEST 1 : Est-ce que l'intercepteur est bien branché ?
   console.log('🌍 REQUÊTE INTERCEPTÉE :', req.url); 
 
+  const token = localStorage.getItem('access_token');
+  let clonedReq = req;
+
+  // On injecte le token d'autorisation si présent dans le localStorage
+  if (token) {
+    clonedReq = req.clone({
+      setHeaders: {
+        Authorization: `Bearer ${token}`
+      }
+    });
+  }
+
   const router = inject(Router);
 
-  return next(req).pipe(
+  return next(clonedReq).pipe(
     catchError((error: HttpErrorResponse) => {
       // TEST 2 : Quel est le code d'erreur exact renvoyé par Django ?
       console.error('🚨 ERREUR API REÇUE :', error.status, error.message); 

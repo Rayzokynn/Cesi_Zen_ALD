@@ -10,15 +10,6 @@ export class AuthSrv {
   private http = inject(HttpClient);
   private router = inject(Router);
   public isAuthenticated = !!localStorage.getItem('access_token');
-
-  private getHeaders() {
-    return {
-      headers: new HttpHeaders({
-        'Authorization': `Bearer ${localStorage.getItem('access_token')}`
-      })
-    };
-  }
-
   login(credentials: { email: string; password: string }) {
     return this.http.post<any>(`${environment.apiUrl}/login/`, credentials).pipe(
       tap(response => {
@@ -43,14 +34,18 @@ export class AuthSrv {
   }
 
   getProfile(): Observable<any> {
-    return this.http.get(`${environment.apiUrl}/profile/`, this.getHeaders());
+    return this.http.get(`${environment.apiUrl}/profile/`);
   }
 
   updateProfile(data: any): Observable<any> {
-    return this.http.put(`${environment.apiUrl}/profile/update/`, data, this.getHeaders());
+    return this.http.put(`${environment.apiUrl}/profile/update/`, data);
   }
 
   changePassword(data: any): Observable<any> {
-    return this.http.put(`${environment.apiUrl}/change-password/`, data, this.getHeaders());
+    return this.http.put(`${environment.apiUrl}/change-password/`, data);
+  }
+
+  getStats(): Observable<any> {
+    return this.http.get(`${environment.apiUrl}/profil/stats/`);
   }
 }
