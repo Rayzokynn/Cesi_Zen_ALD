@@ -122,7 +122,7 @@ export class ConnexionPage implements OnInit {
       return 'Mot de passe requis';
     }
     if (passwordControl?.hasError('minlength')) {
-      return 'Minimum 6 caractères';
+      return 'Minimum 8 caractères';
     }
     return '';
   }
