@@ -19,6 +19,9 @@ class UtilisateurSerializer(serializers.ModelSerializer):
 
         model = Utilisateur
         fields = '__all__'
+        extra_kwargs = {
+            'password': {'write_only': True}
+        }
 
     def validate_password(self, value):
         """Valide la force du mot de passe.

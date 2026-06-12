@@ -24,20 +24,6 @@ from .serializer import (
 )
 
 
-@api_view(['GET'])
-def get_utilisateurs(request):
-    """Récupère la liste de tous les utilisateurs.
-
-    Args:
-        request: La requête HTTP.
-
-    Returns:
-        Response: Liste de tous les utilisateurs.
-    """
-    users = Utilisateur.objects.all()
-    serializer = UtilisateurSerializer(users, many=True)
-    return Response(serializer.data)
-
 
 @api_view(['POST'])
 def create_utilisateur(request):
@@ -54,39 +40,6 @@ def create_utilisateur(request):
         serializer.save()
         return Response(serializer.data, status=status.HTTP_201_CREATED)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-@api_view(['GET', 'PUT', 'DELETE'])
-def utilisateur_details(request, pk):
-    """Récupère, met à jour ou supprime les détails d'un utilisateur.
-
-    Args:
-        request: La requête HTTP.
-        pk: L'identifiant primaire de l'utilisateur.
-
-    Returns:
-        Response: Les détails de l'utilisateur ou un statut 204.
-    """
-    try:
-        user = Utilisateur.objects.get(pk=pk)
-    except Utilisateur.DoesNotExist:
-        return Response(status=status.HTTP_404_NOT_FOUND)
-
-    if request.method == 'GET':
-        serializer = UtilisateurSerializer(user)
-        return Response(serializer.data)
-
-    if request.method == 'PUT':
-        serializer = UtilisateurSerializer(user, data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-    if request.method == 'DELETE':
-        user.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
-
-    return Response(status=status.HTTP_400_BAD_REQUEST)
 
 
 @api_view(['GET'])
@@ -142,90 +95,6 @@ def connecter_utilisateur(request):
         'access': str(refresh.access_token),
         'message': f'Bienvenue {user.pseudo} !'
     }, status=status.HTTP_200_OK)
-
-@api_view(['GET'])
-def profil_utilisateur(request, pk):
-    """Récupère le profil d'un utilisateur spécifique.
-
-    Args:
-        request: La requête HTTP.
-        pk: L'identifiant primaire de l'utilisateur.
-
-    Returns:
-        Response: Les données du profil utilisateur.
-    """
-    try:
-        user = Utilisateur.objects.get(pk=pk)
-        serializer = UtilisateurSerializer(user)
-        return Response(serializer.data)
-    except Utilisateur.DoesNotExist:
-        return Response(status=status.HTTP_404_NOT_FOUND)
-
-@api_view(['PUT'])
-@permission_classes([IsAuthenticated])
-def modifier_utilisateur(request, pk):
-    """Modifie le profil d'un utilisateur (propre profil uniquement).
-
-    Args:
-        request: La requête HTTP de l'utilisateur authentifié.
-        pk: L'identifiant primaire de l'utilisateur.
-
-    Returns:
-        Response: Les données mises à jour ou une erreur.
-    """
-    if request.user.id != pk:
-        return Response(
-            {
-                'error': (
-                    'Accès refusé. '
-                    'Vous ne pouvez modifier que votre propre profil.'
-                )
-            },
-            status=status.HTTP_403_FORBIDDEN
-        )
-
-    try:
-        user = Utilisateur.objects.get(pk=pk)
-    except Utilisateur.DoesNotExist:
-        return Response(status=status.HTTP_404_NOT_FOUND)
-
-    serializer = UtilisateurSerializer(
-        user, data=request.data, partial=True
-    )
-    if serializer.is_valid():
-        serializer.save()
-        return Response(serializer.data)
-    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-@api_view(['DELETE'])
-@permission_classes([IsAuthenticated])
-def supprimer_utilisateur(request, pk):
-    """Supprime le profil d'un utilisateur (propre profil uniquement).
-
-    Args:
-        request: La requête HTTP de l'utilisateur authentifié.
-        pk: L'identifiant primaire de l'utilisateur.
-
-    Returns:
-        Response: Statut 204 ou une erreur.
-    """
-    if request.user.id != pk:
-        return Response(
-            {
-                'error': (
-                    'Accès refusé. '
-                    'Vous ne pouvez supprimer que votre propre profil.'
-                )
-            },
-            status=status.HTTP_403_FORBIDDEN
-        )
-
-    try:
-        user = Utilisateur.objects.get(pk=pk)
-        user.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
-    except Utilisateur.DoesNotExist:
-        return Response(status=status.HTTP_404_NOT_FOUND)
 
 
 @api_view(['GET'])
@@ -322,7 +191,8 @@ def marquer_article_lu(request, pk):
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def mes_statistiques(request):
-    """Retourne les statistiques de l'utilisateur courant.
+    """Retourne les statistiques de l'utilisateur courant en calculant précisément
+    les minutes de relaxation selon les techniques pratiquées.
 
     Args:
         request: La requête HTTP de l'utilisateur authentifié.
@@ -336,10 +206,20 @@ def mes_statistiques(request):
         utilisateur=request.user
     ).count()
 
-    total_cycles = sum(
-        session.cycles_completed for session in sessions
-    )
-    minutes_relax = round((total_cycles * 10) / 60)
+    # Dictionnaire des durées de cycle par technique (en secondes)
+    durees_cycles = {
+        'Relaxant': 19,
+        'Équilibrant': 10,
+        'Apaisant': 10
+    }
+
+    total_secondes = 0
+    for session in sessions:
+        # Récupère la durée du cycle correspondante (10 secondes par défaut)
+        duree_cycle = durees_cycles.get(session.technique_name, 10)
+        total_secondes += session.cycles_completed * duree_cycle
+
+    minutes_relax = round(total_secondes / 60)
 
     return Response({
         'exercices': nb_exercices,
