@@ -97,8 +97,7 @@ jobs:
 
       - name: Run Backend Linter (Pylint)
         run: |
-          pylint --load-plugins=pylint_django --django-settings-module=Cesi_Zen.settings Cesi_Zen_API/api/
-        continue-on-error: true
+          pylint --load-plugins=pylint_django --django-settings-module=Cesi_Zen.settings --disable=line-too-long --fail-under=8.0 Cesi_Zen_API/api/
 
       - name: Run Backend Tests
         env:
@@ -125,7 +124,6 @@ jobs:
         run: |
           cd Cesi_Zen_Front/CesiZen
           npm run lint
-        continue-on-error: true
 
       # --- SonarQube / SonarCloud Scan ---
       - name: SonarQube Scan
