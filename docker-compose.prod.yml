@@ -8,7 +8,12 @@ services:
       - "8000:8000"
     environment:
       - DJANGO_SETTINGS_MODULE=Cesi_Zen.settings
-      - DB_HOST=cesi-db
+      - engine=django.db.backends.mysql
+      - name=cesi_zen_bdd
+      - user=root
+      - password=rootpassword
+      - host=cesi-db
+      - port=3306
     depends_on:
       - cesi-db
     networks:
