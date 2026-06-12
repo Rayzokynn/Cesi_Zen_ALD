@@ -131,7 +131,7 @@ jobs:
 
   deploy:
     needs: test
-    runs-on: [self-hosted, vmdev02]
+    runs-on: self-hosted
     if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/devalexis'
     permissions:
       contents: read
