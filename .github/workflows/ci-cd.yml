@@ -172,6 +172,5 @@ jobs:
           # Mise à jour et lancement des conteneurs
           docker compose pull
           docker compose up -d --remove-orphans
-          # Exécuter les migrations et le seed de la base de données
+          # Exécuter les migrations
           docker compose exec -T backend python manage.py migrate
-          docker compose exec -T backend python manage.py seed_db
