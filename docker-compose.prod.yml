@@ -84,9 +84,34 @@ services:
     networks:
       - cesizen-network
 
+  # Moteur de stockage de logs (Loki)
+  loki:
+    image: grafana/loki:latest
+    container_name: cesizen-loki
+    restart: always
+    volumes:
+      - loki-data:/loki
+    networks:
+      - cesizen-network
+
+  # Agent de collecte de logs (Promtail)
+  promtail:
+    image: grafana/promtail:latest
+    container_name: cesizen-promtail
+    restart: always
+    user: "0:0"
+    volumes:
+      - ./.tools/promtail/promtail-config.yml:/etc/promtail/config.yml:ro
+      - /var/lib/docker/containers:/var/lib/docker/containers:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    command: -config.file=/etc/promtail/config.yml
+    networks:
+      - cesizen-network
+
 networks:
   cesizen-network:
     driver: bridge
 
 volumes:
   grafana-data:
+  loki-data:
