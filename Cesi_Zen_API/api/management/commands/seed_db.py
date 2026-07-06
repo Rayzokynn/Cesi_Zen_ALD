@@ -7,6 +7,12 @@ class Command(BaseCommand):
     help = "Initialise et peuple la base de données locale avec des données de démonstration de développement"
 
     def handle(self, *args, **options):
+        # Sécurité : Éviter d'écraser des données de production existantes
+        if Utilisateur.objects.exists() or ArticleInfo.objects.exists():
+            self.stdout.write(self.style.WARNING("La base de données contient déjà des données (Utilisateurs ou Articles)."))
+            self.stdout.write(self.style.WARNING("Pour éviter toute perte accidentelle, l'initialisation a été annulée."))
+            return
+
         self.stdout.write("Initialisation des données de développement...")
 
         # 1. Nettoyer les données existantes
