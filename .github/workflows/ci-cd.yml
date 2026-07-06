@@ -160,8 +160,8 @@ jobs:
       # Déploiement local en une suite de commandes sur la VM
       - name: Local Deploy on the VM
         run: |
-          # S'assurer que le dossier de déploiement existe et nettoyer l'ancienne config
-          sudo rm -rf ~/cesizen/.tools
+          # S'assurer que le dossier de déploiement existe et nettoyer l'ancienne config (contourne le besoin de sudo via Docker)
+          docker run --rm -v ~/cesizen:/target alpine rm -rf /target/.tools || true
           mkdir -p ~/cesizen/.tools
           # Copier l'intégralité des outils (.tools)
           cp -r .tools/* ~/cesizen/.tools/
