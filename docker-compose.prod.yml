@@ -72,6 +72,21 @@ services:
     networks:
       - cesizen-network
 
+  # Outil de visualisation de métriques (Grafana)
+  grafana:
+    image: grafana/grafana:latest
+    container_name: cesizen-grafana
+    restart: always
+    ports:
+      - "3001:3000"
+    volumes:
+      - grafana-data:/var/lib/grafana
+    networks:
+      - cesizen-network
+
 networks:
   cesizen-network:
     driver: bridge
+
+volumes:
+  grafana-data:
