@@ -21,7 +21,7 @@ services:
     labels:
       - "wud.watch=true"
       - "wud.tag.semver=true"
-      - "wud.tag.include=^v\\d+\\.\\d+\\.(?:0|\\d+-(?:emergency|hotfix))$$"
+      - "wud.tag.include=^v\\d+\\.\\d+\\.\\d+$$"
 
   # Frontend Web (Nginx serving Ionic build)
   frontend:
@@ -37,7 +37,7 @@ services:
     labels:
       - "wud.watch=true"
       - "wud.tag.semver=true"
-      - "wud.tag.include=^v\\d+\\.\\d+\\.(?:0|\\d+-(?:emergency|hotfix))$$"
+      - "wud.tag.include=^v\\d+\\.\\d+\\.\\d+$$"
 
   # Base de données MySQL
   cesi-db:

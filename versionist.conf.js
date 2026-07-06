@@ -14,15 +14,15 @@ module.exports = {
 
   // Détermine le niveau d'incrément en fonction du commit
   getIncrementLevelFromCommit: (commit) => {
-    // Si le sujet contient "major" -> Incrément Majeur (X)
-    if (commit.subject.match(/major/i)) {
+    // Si le sujet contient "major" ou "breaking" -> Incrément Majeur (X)
+    if (commit.subject.match(/major/i) || commit.subject.match(/breaking/i)) {
       return 'major';
     }
-    // Si le sujet contient "breaking" ou commence par "feat" -> Incrément Mineur (Y)
-    if (commit.subject.match(/breaking/i) || commit.subject.match(/^(feat|add)/i)) {
+    // Si le sujet commence par "feat" ou "add" -> Incrément Mineur (Y)
+    if (commit.subject.match(/^(feat|add)/i)) {
       return 'minor';
     }
-    // Par défaut, incrément correctif (Z)
+    // Par défaut, incrément correctif / patch (Z)
     return 'patch';
   },
 
