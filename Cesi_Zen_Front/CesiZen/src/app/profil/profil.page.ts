@@ -97,7 +97,7 @@ export class ProfilPage implements OnInit {
   chargerStatistiques() {
     this.authService.getStats().subscribe({
       next: (data) => this.stats = data,
-      error: (err) => console.error('Erreur stats:', err)
+      error: (err: any) => console.error('Erreur stats:', err)
     });
   }
 

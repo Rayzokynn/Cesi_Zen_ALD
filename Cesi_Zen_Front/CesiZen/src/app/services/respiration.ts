@@ -124,7 +124,7 @@ export class RespirationService implements OnDestroy {
         alert(`Félicitations ! Vous avez complété ${this.cycleCount} cycles. Session enregistrée.`);
         this.resetExercise();
       },
-      error: (err) => {
+      error: (err: any) => {
         console.error('Erreur lors de la sauvegarde:', err);
         alert("Une erreur est survenue lors de l'enregistrement de la session.");
       }
