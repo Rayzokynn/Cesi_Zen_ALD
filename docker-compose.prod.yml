@@ -20,7 +20,8 @@ services:
       - cesizen-network
     labels:
       - "wud.watch=true"
-      - "wud.tag.include=^latest$$"
+      - "wud.tag.semver=true"
+      - "wud.tag.include=^v\\d+\\.\\d+$$"
 
   # Frontend Web (Nginx serving Ionic build)
   frontend:
@@ -35,7 +36,8 @@ services:
       - cesizen-network
     labels:
       - "wud.watch=true"
-      - "wud.tag.include=^latest$$"
+      - "wud.tag.semver=true"
+      - "wud.tag.include=^v\\d+\\.\\d+$$"
 
   # Base de données MySQL
   cesi-db:
