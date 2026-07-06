@@ -33,10 +33,6 @@ export class ConnexionPage implements OnInit {
   personOutline = personOutline;
 
   constructor(
-    private menuCtrl: MenuController,
-    private formBuilder: FormBuilder,
-    private authService: AuthSrv,
-    private router: Router
   ) {
     addIcons({ eye, 'eye-off': eyeOff });
   }
@@ -85,7 +81,7 @@ export class ConnexionPage implements OnInit {
           this.isLoading = false;
           this.router.navigate(['/tabs']);
         },
-        error: (err) => {
+        error: (err: any) => {
           this.isLoading = false;
           alert('Email ou mot de passe incorrect.');
         }
@@ -101,7 +97,7 @@ export class ConnexionPage implements OnInit {
           alert('Compte créé avec succès ! Vous pouvez maintenant vous connecter.');
           this.toggleMode();
         },
-        error: (err) => {
+        error: (err: any) => {
           this.isLoading = false;
           alert('Erreur lors de la création du compte. Cet email ou pseudo est peut-être déjà pris.');
           console.error(err);
