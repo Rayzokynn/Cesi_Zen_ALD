@@ -32,7 +32,12 @@ export class ConnexionPage implements OnInit {
   mailOutline = mailOutline;
   personOutline = personOutline;
 
-  constructor() {
+  constructor(
+    private menuCtrl: MenuController,
+    private formBuilder: FormBuilder,
+    private authService: AuthSrv,
+    private router: Router
+  ) {
     addIcons({ eye, 'eye-off': eyeOff });
   }
 

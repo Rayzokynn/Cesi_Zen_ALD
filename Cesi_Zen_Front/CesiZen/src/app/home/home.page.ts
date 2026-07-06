@@ -21,9 +21,7 @@ interface Article {
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 
-export class HomePage implements OnInit {
-  private respirationService = inject(RespirationService);
-
+export class HomePage {
   private router: Router = inject(Router);
   private alertController: AlertController = inject(AlertController);
   private articleService: ArticleService = inject(ArticleService);
