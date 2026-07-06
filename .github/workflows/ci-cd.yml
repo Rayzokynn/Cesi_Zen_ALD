@@ -160,9 +160,11 @@ jobs:
       # Déploiement local en une suite de commandes sur la VM
       - name: Local Deploy on the VM
         run: |
-          # S'assurer que le dossier de déploiement existe
-          mkdir -p ~/cesizen
-          # Copier le compose interpolé vers le dossier de déploiement de production
+          # S'assurer que le dossier de déploiement existe et nettoyer l'ancienne config erronée si créée par Docker
+          rm -rf ~/cesizen/.tools/promtail
+          mkdir -p ~/cesizen/.tools/promtail
+          # Copier le compose et la configuration de Promtail
+          cp -r .tools/promtail/* ~/cesizen/.tools/promtail/
           cp docker-compose.yml ~/cesizen/docker-compose.yml
           cd ~/cesizen
           # Authentification GHCR
