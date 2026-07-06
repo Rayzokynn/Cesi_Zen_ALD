@@ -8,6 +8,5 @@ class CustomJWTAuthentication(JWTAuthentication):
             user_id = validated_token.get('user_id')
             user = Utilisateur.objects.get(pk=user_id)
             return user
-
-        except Utilisateur.DoesNotExist:
-            raise AuthenticationFailed('Utilisateur introuvable', code='user_not_found')
+        except Utilisateur.DoesNotExist as exc:
+            raise AuthenticationFailed('Utilisateur introuvable', code='user_not_found') from exc

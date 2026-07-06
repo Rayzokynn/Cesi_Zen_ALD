@@ -1,5 +1,5 @@
-import { Component, CUSTOM_ELEMENTS_SCHEMA, inject } from '@angular/core';
-import { IonHeader, IonToolbar, IonContent, IonCard, AlertController} from '@ionic/angular/standalone';
+import { Component, CUSTOM_ELEMENTS_SCHEMA, inject, OnInit } from '@angular/core';
+import { IonHeader, IonToolbar, IonContent, IonCard, AlertController, } from '@ionic/angular/standalone';
 import { HeaderComponent } from '../components/header/header.component';
 import { FormsModule } from '@angular/forms';
 import { Preferences } from '@capacitor/preferences';
@@ -34,7 +34,7 @@ export class HomePage {
   tousLesArticles: Article[] = [];
   articles: Article[] = [];
 
-  constructor(private respirationService: RespirationService) {
+  constructor() {
     console.log('Constructeur  Page');
   }
 

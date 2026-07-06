@@ -1,6 +1,6 @@
 import { addIcons } from 'ionicons';
 import { eye, eyeOff } from 'ionicons/icons';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { AuthSrv } from '../services/auth';
@@ -17,6 +17,11 @@ import { lockClosedOutline, mailOutline, personOutline } from 'ionicons/icons';
   imports: [CommonModule, ReactiveFormsModule, IonContent, IonCard, IonCardContent, IonInput, IonButton, IonIcon, IonItem, IonLabel, IonNote, IonSpinner],
 })
 export class ConnexionPage implements OnInit {
+  private menuCtrl = inject(MenuController);
+  private formBuilder = inject(FormBuilder);
+  private authService = inject(AuthSrv);
+  private router = inject(Router);
+
   loginForm!: FormGroup;
   registerForm!: FormGroup;
   isLoading = false;
@@ -122,7 +127,7 @@ export class ConnexionPage implements OnInit {
       return 'Mot de passe requis';
     }
     if (passwordControl?.hasError('minlength')) {
-      return 'Minimum 6 caractères';
+      return 'Minimum 8 caractères';
     }
     return '';
   }

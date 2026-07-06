@@ -9,11 +9,10 @@ https://docs.djangoproject.com/en/6.0/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/6.0/ref/settings/
 """
-
+from pathlib import Path
 from datetime import timedelta
 import os
 import environ
-from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -83,12 +82,12 @@ WSGI_APPLICATION = 'Cesi_Zen.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': env.str('engine'),
-        'NAME': env.str('name'),
-        'USER': env.str('user'),
-        'PASSWORD': env.str('password'),
-        'HOST': env.str('host'),
-        'PORT': env.str('port'),
+        'ENGINE': env.str('engine', default='django.db.backends.sqlite3'),
+        'NAME': env.str('name', default=str(BASE_DIR / 'db.sqlite3')),
+        'USER': env.str('user', default=''),
+        'PASSWORD': env.str('password', default=''),
+        'HOST': env.str('host', default=''),
+        'PORT': env.str('port', default=''),
     }
 }
 
@@ -140,10 +139,13 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'api.authentication.CustomJWTAuthentication',
 
     )
 }
+# pylint: disable=invalid-name
 CORS_ALLOW_ALL_ORIGINS = True

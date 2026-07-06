@@ -1,0 +1,44 @@
+# --- Stage 1: Builder ---
+FROM python:3.12-slim AS builder
+
+WORKDIR /app
+
+# Installation des dépendances système nécessaires à la compilation
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    gcc \
+    pkg-config \
+    default-libmysqlclient-dev \
+    && rm -rf /var/lib/apt/lists/*
+
+# Installation des dépendances Python dans un dossier local
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+# --- Stage 2: Final Runtime ---
+FROM python:3.12-slim
+
+LABEL org.opencontainers.image.source=https://github.com/Rayzokynn/Cesi_Zen_ALD
+
+# Création d'un utilisateur non-root pour la sécurité
+RUN useradd --create-home appuser
+WORKDIR /home/appuser/app
+
+# Installation de la dépendance runtime minimale pour MySQL
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    default-libmysqlclient-dev \
+    && rm -rf /var/lib/apt/lists/*
+
+# Copie des dépendances installées depuis le stage builder
+COPY --from=builder /usr/local/lib/python3.12/site-packages /usr/local/lib/python3.12/site-packages
+COPY --from=builder /usr/local/bin /usr/local/bin
+
+# Copie du code source
+COPY --chown=appuser:appuser . .
+
+# Utilisation de l'utilisateur non-root
+USER appuser
+
+EXPOSE 8000
+
+# Lancement avec Gunicorn (prévoir d'ajouter 'gunicorn' dans ton requirements.txt)
+CMD ["gunicorn", "--bind", "0.0.0.0:8000", "Cesi_Zen.wsgi:application"]

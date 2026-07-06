@@ -1,0 +1,15 @@
+FROM node:lts-alpine
+
+# Installation de Python et PIP pour Pylint
+RUN apk add --no-cache python3 py3-pip
+
+# Installation des linters globaux
+# 1. Pylint pour Python
+# 2. ESLint pour Angular/TypeScript
+RUN pip install pylint pylint-django --break-system-packages
+RUN npm install -g eslint @angular-eslint/schematics
+
+WORKDIR /app
+
+# On ne définit pas de CMD car ce conteneur sera appelé 
+# directement par ta pipeline (ex: docker-compose run --rm linter pylint ...)

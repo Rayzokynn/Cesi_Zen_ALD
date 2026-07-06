@@ -1,0 +1,75 @@
+services:
+  # Backend API (Django + Gunicorn)
+  backend:
+    image: ghcr.io/${REPO_LOWER}/cesizen-backend:latest
+    container_name: cesizen-backend-prod
+    restart: always
+    ports:
+      - "8000:8000"
+    environment:
+      - DJANGO_SETTINGS_MODULE=Cesi_Zen.settings
+      - engine=django.db.backends.mysql
+      - name=cesi_zen_bdd
+      - user=root
+      - password=rootpassword
+      - host=cesi-db
+      - port=3306
+    depends_on:
+      - cesi-db
+    networks:
+      - cesizen-network
+    labels:
+      - "wud.watch=true"
+      - "wud.tag.include=^latest$$"
+
+  # Frontend Web (Nginx serving Ionic build)
+  frontend:
+    image: ghcr.io/${REPO_LOWER}/cesizen-frontend:latest
+    container_name: cesizen-frontend-prod
+    restart: always
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+    networks:
+      - cesizen-network
+    labels:
+      - "wud.watch=true"
+      - "wud.tag.include=^latest$$"
+
+  # Base de données MySQL
+  cesi-db:
+    image: mysql:8.4
+    container_name: cesi-db
+    restart: always
+    environment:
+      MYSQL_DATABASE: cesi_zen_bdd
+      MYSQL_ROOT_PASSWORD: rootpassword
+    volumes:
+      - ./db_data:/var/lib/mysql
+    ports:
+      - "3306:3306"
+    networks:
+      - cesizen-network
+
+  # Outil de mise à jour automatique (What's Up Docker)
+  wud:
+    image: ghcr.io/getwud/wud:latest
+    container_name: cesizen-wud
+    restart: always
+    ports:
+      - "3000:3000"
+    environment:
+      - WUD_WATCHER_LOCAL_WATCHBYDEFAULT=false
+      - WUD_WATCHER_LOCAL_CRON=*/5 * * * *
+      - WUD_TRIGGER_DOCKER_AUTOUPDATE_AUTO=true
+      - WUD_TRIGGER_DOCKER_AUTOUPDATE_PRUNE=true
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ~/.docker/config.json:/root/.docker/config.json:ro
+    networks:
+      - cesizen-network
+
+networks:
+  cesizen-network:
+    driver: bridge

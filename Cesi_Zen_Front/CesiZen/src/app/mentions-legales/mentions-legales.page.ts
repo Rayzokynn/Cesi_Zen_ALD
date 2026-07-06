@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonContent, IonHeader, IonTitle, IonToolbar, IonCardContent, IonCard, IonCardTitle, IonCardHeader, IonBackButton, IonButtons} from '@ionic/angular/standalone';
@@ -10,11 +10,8 @@ import { IonContent, IonHeader, IonTitle, IonToolbar, IonCardContent, IonCard, I
   standalone: true,
   imports: [IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule, IonCardContent, IonCard, IonCardTitle, IonCardHeader, IonBackButton, IonButtons]
 })
-export class MentionsLegalesPage implements OnInit {
+export class MentionsLegalesPage{
 
   constructor() { }
-
-  ngOnInit() {
-  }
 
 }

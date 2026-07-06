@@ -113,19 +113,13 @@ export class RespirationService implements OnDestroy {
   terminerSession() {
     this.isPlaying = false;
     this.clearTimer();
-    
-    const token = localStorage.getItem('access_token');
-    console.log('Mon jeton est :', token);
-    const headers = new HttpHeaders({
-      'Authorization': `Bearer ${token}`
-    });
 
     const data = {
       technique_name: this.activeTechnique.name,
       cycles_completed: this.cycleCount
     };
 
-    this.http.post(`${environment.apiUrl}/sessions/respiration/`, data, { headers }).subscribe({
+    this.http.post(`${environment.apiUrl}/sessions/respiration/`, data).subscribe({
       next: (res) => {
         alert(`Félicitations ! Vous avez complété ${this.cycleCount} cycles. Session enregistrée.`);
         this.resetExercise();
@@ -138,10 +132,6 @@ export class RespirationService implements OnDestroy {
   }
 
   getHistorique() {
-    const token = localStorage.getItem('access_token');
-    const headers = new HttpHeaders({
-      'Authorization': `Bearer ${token}`
-    });
-    return this.http.get<any[]>(`${environment.apiUrl}/sessions/respiration/historique/`, { headers });
+    return this.http.get<any[]>(`${environment.apiUrl}/sessions/respiration/historique/`);
   }
 }

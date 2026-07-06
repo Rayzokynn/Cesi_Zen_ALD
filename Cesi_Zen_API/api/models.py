@@ -13,7 +13,7 @@ class Admin(models.Model):
     password_admin = models.CharField(max_length=255)
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'admin'
 
 
@@ -115,6 +115,7 @@ class ConfigRespi(models.Model):
     duree_inspi = models.IntegerField()
     duree_apnee = models.IntegerField()
     duree_expi = models.IntegerField()
+    utilisateur = models.ForeignKey('Utilisateur', models.DO_NOTHING, db_column='utilisateur_id')
 
     class Meta:
         managed = True
@@ -164,19 +165,6 @@ class DjangoSession(models.Model):
     class Meta:
         managed = False
         db_table = 'django_session'
-
-
-class JournalEmotion(models.Model):
-    date_heure = models.DateTimeField(blank=True, null=True)
-    emotion_niv1 = models.CharField(max_length=50)
-    emotion_niv2 = models.CharField(max_length=50)
-    commentaire = models.TextField(blank=True, null=True)
-    utilisateur = models.ForeignKey('Utilisateur', models.DO_NOTHING)
-
-    class Meta:
-        managed = True
-        db_table = 'journal_emotion'
-
 
 class Utilisateur(models.Model):
     id = models.AutoField(primary_key=True)

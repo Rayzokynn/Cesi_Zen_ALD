@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { IonicModule } from '@ionic/angular';
 import { RespirationService } from '../services/respiration';
@@ -13,8 +13,8 @@ import { HeaderComponent } from '../components/header/header.component';
   imports: [IonicModule, CommonModule, HeaderComponent]
 })
 export class ExercicePage {
+  respirationService = inject(RespirationService);
 
-  constructor(public respirationService: RespirationService) {}
 
   ionViewWillLeave() {
     this.respirationService.resetExercise();

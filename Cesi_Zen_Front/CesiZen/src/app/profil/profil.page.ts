@@ -1,6 +1,4 @@
 import { Component, inject, OnInit } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { environment } from '../../environments/environment';
 import { IonHeader, IonToolbar, IonContent, IonCard, IonCardHeader, IonCardTitle, IonCardContent, IonAvatar, IonList, IonItem, IonLabel, IonButton, IonIcon, IonGrid, IonRow, IonCol, IonText, IonInput, AlertController } from '@ionic/angular/standalone';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -16,11 +14,10 @@ import { personOutline, statsChartOutline, settingsOutline, pencilOutline, lockC
   imports: [CommonModule, FormsModule, IonHeader, IonToolbar, IonContent, IonCard, IonCardHeader, IonCardTitle, IonCardContent, IonAvatar, IonList, IonItem, IonLabel, IonButton, IonIcon, IonGrid, IonRow, IonCol, IonText, IonInput, HeaderComponent],
 })
 export class ProfilPage implements OnInit {
-  private http = inject(HttpClient);
   private authService = inject(AuthSrv);
   private alertCtrl = inject(AlertController);
   
-  user: any = { username: '', email: '' };
+  user: any = { pseudo: '', email: '' };
   userBackup: any = {};
   isEditing: boolean = false;
   userInitials: string = 'U';
@@ -66,10 +63,10 @@ export class ProfilPage implements OnInit {
       next: () => {
         this.isEditing = false;
         this.userBackup = { ...this.user };
-        this.userInitials = this.getInitials(this.user.username);
-        window.alert('Profil mis à jour !');
+        this.userInitials = this.getInitials(this.user.pseudo);
+        this.afficherMessage('Succès', 'Profil mis à jour !');
       },
-      error: () => window.alert('Erreur lors de la mise à jour.')
+      error: () => this.afficherMessage('Erreur', 'Erreur lors de la mise à jour.')
     });
   }
 
@@ -87,8 +84,8 @@ export class ProfilPage implements OnInit {
           text: 'Confirmer',
           handler: (data) => {
             this.authService.changePassword(data).subscribe({
-              next: () => window.alert('Mot de passe modifié !'),
-              error: (err: any) => window.alert('Erreur: ' + (err.error?.detail || 'Échec'))
+              next: () => this.afficherMessage('Succès', 'Mot de passe modifié !'),
+              error: (err: any) => this.afficherMessage('Erreur', err.error?.detail || 'Échec')
             });
           }
         }
@@ -98,10 +95,7 @@ export class ProfilPage implements OnInit {
   }
 
   chargerStatistiques() {
-    const token = localStorage.getItem('access_token');
-    if (!token) return;
-    const headers = new HttpHeaders({ 'Authorization': `Bearer ${token}` });
-    this.http.get<any>(`${environment.apiUrl}/profil/stats/`, { headers }).subscribe({
+    this.authService.getStats().subscribe({
       next: (data) => this.stats = data,
       error: (err) => console.error('Erreur stats:', err)
     });
@@ -113,5 +107,14 @@ export class ProfilPage implements OnInit {
     if (!name) return 'U';
     const parts = name.trim().split(' ');
     return parts.length > 1 ? (parts[0][0] + parts[1][0]).toUpperCase() : parts[0][0].toUpperCase();
+  }
+
+  private async afficherMessage(header: string, message: string) {
+    const alert = await this.alertCtrl.create({
+      header,
+      message,
+      buttons: ['OK']
+    });
+    await alert.present();
   }
 }
