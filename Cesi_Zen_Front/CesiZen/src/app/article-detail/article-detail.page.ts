@@ -31,7 +31,7 @@ export class ArticleDetailPage implements OnInit {
           this.chargement = false;
           this.enregistrerLecture(idParam);
         },
-        error: (err) => {
+        error: (err: any) => {
           console.error('Erreur lors du chargement de l\'article', err);
           this.chargement = false;
         }

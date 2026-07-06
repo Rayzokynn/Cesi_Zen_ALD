@@ -1,7 +1,7 @@
 from django.core.management.base import BaseCommand
 from django.contrib.auth.hashers import make_password
 from django.utils import timezone
-from api.models import Utilisateur, Categorie, ArticleInfo, SessionRespiration
+from api.models import Utilisateur, Categorie, ArticleInfo, SessionRespiration, ArticleLu, ConfigRespi
 
 class Command(BaseCommand):
     help = "Initialise et peuple la base de données locale avec des données de démonstration de développement"
@@ -11,6 +11,8 @@ class Command(BaseCommand):
 
         # 1. Nettoyer les données existantes
         self.stdout.write("Nettoyage des anciennes données...")
+        ArticleLu.objects.all().delete()
+        ConfigRespi.objects.all().delete()
         SessionRespiration.objects.all().delete()
         ArticleInfo.objects.all().delete()
         Categorie.objects.all().delete()

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { NavigationEnd, Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { IonApp, IonRouterOutlet, IonSplitPane, IonMenu, IonHeader, IonToolbar, IonTitle, IonContent, IonList, IonMenuToggle, IonItem, IonIcon, IonLabel, IonFooter,} from '@ionic/angular/standalone';
 import { filter } from 'rxjs';
@@ -11,8 +11,9 @@ import { filter } from 'rxjs';
   imports: [ IonApp, IonRouterOutlet, IonSplitPane, IonMenu, IonHeader, IonToolbar, IonTitle, IonContent, IonList, IonMenuToggle, IonItem, IonIcon, IonLabel, RouterLink, RouterLinkActive, IonFooter,],
 })
 export class AppComponent {
+  private router = inject(Router);
   public isMenuDisabled = false;
-  constructor(private router: Router) {
+  constructor() {
     this.router.events.pipe(
       filter((event: any) => event instanceof NavigationEnd)
     ).subscribe((event: any) => {

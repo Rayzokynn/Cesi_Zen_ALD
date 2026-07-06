@@ -21,10 +21,11 @@ interface Article {
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 
-export class HomePage {
+export class HomePage implements OnInit {
   private router: Router = inject(Router);
   private alertController: AlertController = inject(AlertController);
   private articleService: ArticleService = inject(ArticleService);
+  private respirationService: RespirationService = inject(RespirationService);
   private STORAGE_KEY = 'list-images'
   private POPUP_KEY = 'popup-welcome-shown'
   user: string = 'Alexis';
@@ -58,7 +59,7 @@ export class HomePage {
         this.tousLesArticles = data;
         this.articles = [...this.tousLesArticles];
       },
-      error: (err) => {
+      error: (err: any) => {
         console.error('Erreur lors de la récupération des articles:', err);
       }
     });
@@ -112,11 +113,11 @@ export class HomePage {
   chargerHistorique() {
     this.chargement = true;
     this.respirationService.getHistorique().subscribe({
-      next: (data) => {
+      next: (data: any) => {
         this.historique = data;
         this.chargement = false;
       },
-      error: (err) => {
+      error: (err: any) => {
         console.error('Erreur de récupération:', err);
         this.chargement = false;
       }
