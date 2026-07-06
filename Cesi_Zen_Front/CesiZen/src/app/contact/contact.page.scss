@@ -74,3 +74,61 @@ p, li {
   --border-radius: 8px;
   height: 50px;
 }
+
+.glpi-card {
+  --background: #f0fdf4;
+  border: 1px solid #bbf7d0;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 168, 120, 0.08);
+  margin-top: 1rem;
+  margin-bottom: 2rem;
+
+  .glpi-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 12px;
+
+    .glpi-icon {
+      font-size: 2rem;
+      color: #00a878;
+      margin-right: 12px;
+    }
+
+    .glpi-title-wrapper {
+      h3 {
+        margin: 0;
+        font-size: 1.2rem;
+        font-weight: 700;
+        color: #005c4a;
+      }
+
+      .glpi-tagline {
+        margin: 2px 0 0 0;
+        font-size: 0.85rem;
+        color: #00a878;
+        font-weight: 500;
+      }
+    }
+  }
+
+  .glpi-description {
+    font-size: 0.95rem;
+    line-height: 1.5;
+    color: #4a5568;
+    margin-bottom: 16px;
+  }
+
+  .glpi-button {
+    --background: #00a878;
+    --background-hover: #008f64;
+    --background-activated: #007552;
+    --color: #ffffff;
+    --border-radius: 8px;
+    font-weight: 600;
+    margin: 0;
+    
+    ion-icon {
+      font-size: 1.2rem;
+    }
+  }
+}
