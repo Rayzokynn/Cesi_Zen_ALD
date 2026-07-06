@@ -161,7 +161,7 @@ jobs:
       - name: Local Deploy on the VM
         run: |
           # S'assurer que le dossier de déploiement existe et nettoyer l'ancienne config erronée si créée par Docker
-          rm -rf ~/cesizen/.tools/promtail
+          sudo rm -rf ~/cesizen/.tools/promtail
           mkdir -p ~/cesizen/.tools/promtail
           # Copier le compose et la configuration de Promtail
           cp -r .tools/promtail/* ~/cesizen/.tools/promtail/
