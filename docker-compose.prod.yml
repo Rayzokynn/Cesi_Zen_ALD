@@ -20,7 +20,8 @@ services:
       - cesizen-network
     labels:
       - "wud.watch=true"
-      - "wud.tag.include=^latest$$"
+      - "wud.tag.semver=true"
+      - "wud.tag.include=^v\\d+\\.\\d+\\.(?:0|\\d+-(?:emergency|hotfix))$$"
 
   # Frontend Web (Nginx serving Ionic build)
   frontend:
@@ -35,7 +36,8 @@ services:
       - cesizen-network
     labels:
       - "wud.watch=true"
-      - "wud.tag.include=^latest$$"
+      - "wud.tag.semver=true"
+      - "wud.tag.include=^v\\d+\\.\\d+\\.(?:0|\\d+-(?:emergency|hotfix))$$"
 
   # Base de données MySQL
   cesi-db:
@@ -70,6 +72,21 @@ services:
     networks:
       - cesizen-network
 
+  # Outil de visualisation de métriques (Grafana)
+  grafana:
+    image: grafana/grafana:latest
+    container_name: cesizen-grafana
+    restart: always
+    ports:
+      - "3001:3000"
+    volumes:
+      - grafana-data:/var/lib/grafana
+    networks:
+      - cesizen-network
+
 networks:
   cesizen-network:
     driver: bridge
+
+volumes:
+  grafana-data:
