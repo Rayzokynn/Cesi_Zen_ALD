@@ -40,5 +40,5 @@ USER appuser
 
 EXPOSE 8000
 
-# Lancement avec Gunicorn (prévoir d'ajouter 'gunicorn' dans ton requirements.txt)
-CMD ["gunicorn", "--bind", "0.0.0.0:8000", "Cesi_Zen.wsgi:application"]
+# Lancement avec Gunicorn après avoir appliqué les migrations de BDD
+CMD ["sh", "-c", "python manage.py migrate && gunicorn --bind 0.0.0.0:8000 Cesi_Zen.wsgi:application"]

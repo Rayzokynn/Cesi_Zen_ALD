@@ -140,7 +140,8 @@ jobs:
   deploy:
     needs: test
     runs-on: self-hosted
-    if: github.ref == 'refs/heads/main'
+    # Désactivé en faveur du déploiement automatique via WUD (What's Up Docker)
+    if: false && github.ref == 'refs/heads/main'
     permissions:
       contents: read
       packages: read
