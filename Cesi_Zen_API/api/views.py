@@ -72,19 +72,48 @@ def connecter_utilisateur(request):
     email = request.data.get('email')
     password = request.data.get('password')
 
+    from axes.utils import is_user_locked_out
+    from django.contrib.auth.signals import user_login_failed, user_logged_in
+
+    # Vérification du verrouillage avant toute tentative
+    if is_user_locked_out(request):
+        return Response(
+            {'error': 'Ce compte ou cette adresse IP est temporairement bloqué(e) suite à trop de tentatives.'},
+            status=status.HTTP_403_FORBIDDEN
+        )
+
     try:
         user = Utilisateur.objects.get(email=email)
     except Utilisateur.DoesNotExist:
+        # Envoi du signal d'échec pour django-axes
+        user_login_failed.send(
+            sender=Utilisateur,
+            request=request,
+            credentials={'username': email}
+        )
         return Response(
             {'error': 'Email introuvable'},
             status=status.HTTP_404_NOT_FOUND
         )
 
     if not check_password(password, user.password):
+        # Envoi du signal d'échec pour django-axes
+        user_login_failed.send(
+            sender=Utilisateur,
+            request=request,
+            credentials={'username': email}
+        )
         return Response(
             {'error': 'Mot de passe incorrect'},
             status=status.HTTP_401_UNAUTHORIZED
         )
+
+    # Réinitialisation des tentatives d'accès en cas de succès
+    user_logged_in.send(
+        sender=Utilisateur,
+        request=request,
+        user=user
+    )
 
     user.date_connexion = timezone.now()
     user.save()
